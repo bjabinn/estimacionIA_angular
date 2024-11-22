@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-
+import { FixedHeaderComponent } from './fixed-header/fixed-header.component';
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [FixedHeaderComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })

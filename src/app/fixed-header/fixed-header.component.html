@@ -1,33 +1,38 @@
 <h1>Gestión de Proyectos</h1>
 
-<div class="fixed-header">
+<form [formGroup]="projectForm" (ngSubmit)="onSubmit()">
+  <div class="fixed-header">
     <div class="row">
-        <div>
-            <label>PROYECTO</label>
-            <input type="text" name="proyecto" placeholder="Nombre del proyecto">
-        </div>
-        <div>
-            <label>SPRINT</label>
-            <input type="text" name="sprint" placeholder="Número del sprint">
-        </div>
-        <div>
-            <label>HISTORIA JIRA</label>
-            <input type="text" name="historiaJira" placeholder="Código de Jira">
-        </div>
+      <div>
+        <label for="proyecto">PROYECTO</label>
+        <input id="proyecto" type="text" formControlName="proyecto" placeholder="Nombre del proyecto">
+      </div>
+      <div>
+        <label for="sprint">SPRINT</label>
+        <input id="sprint" type="text" formControlName="sprint" placeholder="Número del sprint">
+      </div>
+      <div>
+        <label for="historiaJira">HISTORIA JIRA</label>
+        <input id="historiaJira" type="text" formControlName="historiaJira" placeholder="Código de Jira">
+      </div>
     </div>
     <div>
-        <label>HISTORIA</label>
-        <input type="text" name="historia" placeholder="Nombre de la historia" style="width: 100%;">
+      <label for="historia">HISTORIA</label>
+      <input id="historia" type="text" formControlName="historia" placeholder="Nombre de la historia">
     </div>
-</div>
+  </div>
 
-<div #componentsContainer></div>
-
-<div class="action-buttons">
-    <button id="add-component" class="add-component" (click)="addComponent()">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
-        </svg>
-    </button>
-    <button id="save-button" class="save-button" (click)="saveData()">Guardar</button>
-</div>
+  <div formArrayName="componentes">
+    <div *ngFor="let componente of componentes.controls; let i = index" [formGroupName]="i">
+      <app-dynamic-content
+        [dynamicForm]="getComponenteFormGroup(i)"
+        (remove)="removeComponent(i)">
+      </app-dynamic-content>
+    </div>
+  </div>
+  
+  <div class="action-buttons">
+    <button type="button" (click)="addComponent()">Agregar Componente</button>
+    <button type="submit">Guardar</button>
+  </div>
+</form>
