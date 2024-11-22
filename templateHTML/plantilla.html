@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Proyectos</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+    <h1>Gestión de Proyectos</h1>
+
+    <div class="fixed-header">
+        <div class="row">
+            <div>
+                <label>PROYECTO</label>
+                <input type="text" name="proyecto" placeholder="Nombre del proyecto">
+            </div>
+            <div>
+                <label>SPRINT</label>
+                <input type="text" name="sprint" placeholder="Número del sprint">
+            </div>
+            <div>
+                <label>HISTORIA JIRA</label>
+                <input type="text" name="historiaJira" placeholder="Código de Jira">
+            </div>
+        </div>
+        <div>
+            <label>HISTORIA</label>
+            <input type="text" name="historia" placeholder="Nombre de la historia" style="width: 100%;">
+        </div>
+    </div>
+
+    <div id="components-container"></div>
+
+    <div class="action-buttons">
+        <button id="add-component" class="add-component">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
+            </svg>
+        </button>
+        <button id="save-button" class="save-button">Guardar</button>
+    </div>
+
+    <script>
+        const container = document.getElementById('components-container');
+        const addButton = document.getElementById('add-component');
+        const saveButton = document.getElementById('save-button');
+
+        addButton.addEventListener('click', () => {
+            const component = document.createElement('div');
+            component.className = 'component';
+            component.innerHTML = `
+                <div class="row">
+                    <label>Tarea</label>
+                    <select name="tarea[]">
+                        <option value="prompt_hu">Prompt HU</option>
+                        <option value="documentar">Documentar</option>
+                        <option value="refactorizar">Refactorizar</option>
+                        <option value="test_unitarios">Test Unitarios</option>
+                    </select>
+                    
+                    <label>Aplica IA?</label>
+                    <select name="aplicaIa[]">
+                        <option value="yes">Sí</option>
+                        <option value="no">No</option>
+                    </select>
+                    
+                    <label>Usada IA?</label>
+                    <select name="usadaIa[]">
+                        <option value="yes">Sí</option>
+                        <option value="no">No</option>
+                    </select>
+                    
+                    <label>Calidad Salida IA</label>
+                    <input type="text" name="calidadSalidaIa[]" placeholder="Calidad de salida de la IA">
+                    
+                    <label>Estimación sin IA</label>
+                    <input type="number" name="estimacionSinIa[]" placeholder="Días sin IA">
+                    
+                    <label>Estimación con IA</label>
+                    <input type="number" name="estimacionConIa[]" placeholder="Días con IA">
+                    
+                    <button class="remove-component">-</button>
+                </div>
+            `;
+            component.querySelector('.remove-component').addEventListener('click', () => {
+                container.removeChild(component);
+            });
+            container.appendChild(component);
+        });
+
+        saveButton.addEventListener('click', () => {
+            alert('Datos guardados correctamente');
+        });
+    </script>
+</body>
+</html>
