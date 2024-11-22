@@ -1,32 +1,33 @@
-<div class="row">
-    <label>Tarea</label>
-    <select name="tarea[]">
-        <option value="prompt_hu">Prompt HU</option>
-        <option value="documentar">Documentar</option>
-        <option value="refactorizar">Refactorizar</option>
-        <option value="test_unitarios">Test Unitarios</option>
+<div [formGroup]="dynamicForm" class="row">
+    <label for="tarea">Tarea</label>
+    <select id="tarea" formControlName="tarea">
+      <option value="prompt_hu">Prompt HU</option>
+      <option value="documentar">Documentar</option>
+      <option value="refactorizar">Refactorizar</option>
+      <option value="test_unitarios">Test Unitarios</option>
     </select>
-    
-    <label>Aplica IA?</label>
-    <select name="aplicaIa[]">
-        <option value="yes">Sí</option>
-        <option value="no">No</option>
+  
+    <label for="aplicaIa">Aplica IA?</label>
+    <select id="aplicaIa" formControlName="aplicaIa">
+      <option value="yes">Sí</option>
+      <option value="no">No</option>
     </select>
-    
-    <label>Usada IA?</label>
-    <select name="usadaIa[]">
-        <option value="yes">Sí</option>
-        <option value="no">No</option>
+  
+    <label for="usadaIa">Usada IA?</label>
+    <select id="usadaIa" formControlName="usadaIa">
+      <option value="yes">Sí</option>
+      <option value="no">No</option>
     </select>
-    
-    <label>Calidad Salida IA</label>
-    <input type="text" name="calidadSalidaIa[]" placeholder="Calidad de salida de la IA">
-    
-    <label>Estimación sin IA</label>
-    <input type="number" name="estimacionSinIa[]" placeholder="Días sin IA">
-    
-    <label>Estimación con IA</label>
-    <input type="number" name="estimacionConIa[]" placeholder="Días con IA">
-    
-    <button class="remove-component" (click)="removeComponent()">-</button>
-</div>
+  
+    <label for="calidadSalidaIa">Calidad Salida IA</label>
+    <input id="calidadSalidaIa" type="text" formControlName="calidadSalidaIa" placeholder="Calidad de salida de la IA">
+  
+    <label for="estimacionSinIa">Estimación sin IA</label>
+    <input id="estimacionSinIa" type="number" formControlName="estimacionSinIa" placeholder="Días sin IA">
+  
+    <label for="estimacionConIa">Estimación con IA</label>
+    <input id="estimacionConIa" type="number" formControlName="estimacionConIa" placeholder="Días con IA">
+  
+    <button type="button" class="remove-component" (click)="removeComponent()">Eliminar</button>
+  </div>
+  
