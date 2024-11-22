@@ -1,0 +1,64 @@
+.fixed-header {
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 2px solid #007BFF;
+    border-radius: 5px;
+    background: #e7f3ff;
+}
+.fixed-header .row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+.fixed-header .row input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.fixed-header label {
+    font-weight: bold;
+}
+.fixed-header input[name="proyecto"] {
+    max-width: 35ch;
+}
+.fixed-header input[name="sprint"] {
+    max-width: 20ch;
+}
+.fixed-header input[name="historiaJira"] {
+    max-width: 15ch;
+}
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+.add-component {
+    background: #28a745;
+    color: #fff;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.add-component:hover {
+    background: #218838;
+}
+.add-component svg {
+    width: 16px;
+    height: 16px;
+}
+.save-button {
+    background: #007BFF;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.save-button:hover {
+    background: #0056b3;
+}

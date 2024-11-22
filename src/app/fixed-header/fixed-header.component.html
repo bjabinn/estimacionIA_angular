@@ -1,0 +1,33 @@
+<h1>Gestión de Proyectos</h1>
+
+<div class="fixed-header">
+    <div class="row">
+        <div>
+            <label>PROYECTO</label>
+            <input type="text" name="proyecto" placeholder="Nombre del proyecto">
+        </div>
+        <div>
+            <label>SPRINT</label>
+            <input type="text" name="sprint" placeholder="Número del sprint">
+        </div>
+        <div>
+            <label>HISTORIA JIRA</label>
+            <input type="text" name="historiaJira" placeholder="Código de Jira">
+        </div>
+    </div>
+    <div>
+        <label>HISTORIA</label>
+        <input type="text" name="historia" placeholder="Nombre de la historia" style="width: 100%;">
+    </div>
+</div>
+
+<div #componentsContainer></div>
+
+<div class="action-buttons">
+    <button id="add-component" class="add-component" (click)="addComponent()">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
+        </svg>
+    </button>
+    <button id="save-button" class="save-button" (click)="saveData()">Guardar</button>
+</div>
