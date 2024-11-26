@@ -17,12 +17,19 @@ h1#gestionTitle {
   background: #e7f3ff;
 }
 
-.fixed-header input {
+.fixed-header input,
+.fixed-header mat-select {
   flex: 1;
   padding: 8px;
   border: 1px solid #ccc;
+  background: #fff;
   border-radius: 4px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  -ms-border-radius: 4px;
+  -o-border-radius: 4px;
 }
+
 .fixed-header label {
   font-weight: bold;
 }

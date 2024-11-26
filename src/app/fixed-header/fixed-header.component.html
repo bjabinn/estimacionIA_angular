@@ -5,33 +5,50 @@
       <div class="row d-flex flex-row justify-content-around">
         <div class="col-4">
           <label for="proyecto" class="col-12">PROYECTO</label>
-          <input
+          <mat-select
             id="proyecto"
-            type="text"
             class="col-12"
+            [(value)]="selectedProyect"
+            (selectionChange)="onSelectionProyectoChange($event)"
             formControlName="proyecto"
-            placeholder="Nombre del proyecto"
-          />
+            placeholder="Selecciona un Proyecto"
+          >
+            <mat-option *ngFor="let proyecto of proyectos" [value]="proyecto">{{
+              proyecto.nombre
+            }}</mat-option>
+          </mat-select>
         </div>
         <div class="col-4">
           <label for="sprint" class="col-12">SPRINT</label>
-          <input
+          <mat-select
             id="sprint"
-            type="text"
             class="col-12"
+            [(value)]="selectedProyect"
+            (selectionChange)="onSelectionProyectoChange($event)"
             formControlName="sprint"
-            placeholder="Número del sprint"
-          />
+            placeholder="Selecciona un Sprint"
+          >
+            <mat-option *ngFor="let sprint of sprints" [value]="sprint">{{
+              sprint.nombre
+            }}</mat-option>
+          </mat-select>
         </div>
         <div class="col-4">
           <label for="historiaJira" class="col-12">HISTORIA JIRA</label>
-          <input
+          <mat-select
             id="historiaJira"
-            type="text"
             class="col-12"
+            [(value)]="selectedProyect"
+            (selectionChange)="onSelectionProyectoChange($event)"
             formControlName="historiaJira"
-            placeholder="Código de Jira"
-          />
+            placeholder="Selecciona un Código de Jira"
+          >
+            <mat-option
+              *ngFor="let historiaJira of historiasJira"
+              [value]="historiaJira"
+              >{{ historiaJira.descripcion }}</mat-option
+            >
+          </mat-select>
         </div>
       </div>
       <div class="row mt-1">
@@ -52,10 +69,10 @@
             type="text"
             class="col-12"
             formControlName="notas"
-            placeholder=""
+            placeholder="Añade alguna nota (Opcional)"
           />
         </div>
-      </div>      
+      </div>
     </div>
 
     <div id="components-container" formArrayName="componentes">
