@@ -1,42 +1,47 @@
-
 .component {
-    margin-bottom: 20px;
-    padding: 15px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background: #f9f9f9;
-}
-.component .row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+  margin-bottom: 20px;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background: #f9f9f9;
+  box-shadow: 0px 0px 2px 0px black;
 }
 .component label {
-    font-size: 14px;
-    white-space: nowrap;
+  font-size: 14px;
+  white-space: nowrap;
+  font-weight: bold;
 }
+
 .component input,
 .component select {
-    font-size: 14px;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    flex: 1;
+  font-size: 14px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  flex: 1;
 }
 .component .remove-component {
-    background: #dc3545;
-    color: #fff;
-    padding: 8px;
-    border: none;
-    border-radius: 50%;
-    cursor: pointer;
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
+  background: #dc3545;
+  color: #fff;
+  padding: 8px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
 }
 .component .remove-component:hover {
-    background: #a71d2a;
+  background: #a71d2a;
+}
+
+.delete-Btn {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+  padding-top: 24px;
 }

@@ -1,38 +1,88 @@
-<h1>Gestión de Proyectos</h1>
+<h1 id="gestionTitle" class="ms-3">Adopción de IA</h1>
+<div class="p-3">
+  <form [formGroup]="projectForm" (ngSubmit)="onSubmit()">
+    <div class="fixed-header">
+      <div class="row d-flex flex-row justify-content-around">
+        <div class="col-4">
+          <label for="proyecto" class="col-12">PROYECTO</label>
+          <input
+            id="proyecto"
+            type="text"
+            class="col-12"
+            formControlName="proyecto"
+            placeholder="Nombre del proyecto"
+          />
+        </div>
+        <div class="col-4">
+          <label for="sprint" class="col-12">SPRINT</label>
+          <input
+            id="sprint"
+            type="text"
+            class="col-12"
+            formControlName="sprint"
+            placeholder="Número del sprint"
+          />
+        </div>
+        <div class="col-4">
+          <label for="historiaJira" class="col-12">HISTORIA JIRA</label>
+          <input
+            id="historiaJira"
+            type="text"
+            class="col-12"
+            formControlName="historiaJira"
+            placeholder="Código de Jira"
+          />
+        </div>
+      </div>
+      <div class="row mt-1">
+        <div class="col-4">
+          <label for="owner" class="col-12">RESPONSABLE TAREA</label>
+          <input
+            id="owner"
+            type="text"
+            class="col-12"
+            formControlName="owner"
+            placeholder="Tu nombre"
+          />
+        </div>
+        <div class="col-8">
+          <label for="notas" class="col-12">NOTAS</label>
+          <input
+            id="notas"
+            type="text"
+            class="col-12"
+            formControlName="notas"
+            placeholder=""
+          />
+        </div>
+      </div>      
+    </div>
 
-<form [formGroup]="projectForm" (ngSubmit)="onSubmit()">
-  <div class="fixed-header">
-    <div class="row">
-      <div>
-        <label for="proyecto">PROYECTO</label>
-        <input id="proyecto" type="text" formControlName="proyecto" placeholder="Nombre del proyecto">
-      </div>
-      <div>
-        <label for="sprint">SPRINT</label>
-        <input id="sprint" type="text" formControlName="sprint" placeholder="Número del sprint">
-      </div>
-      <div>
-        <label for="historiaJira">HISTORIA JIRA</label>
-        <input id="historiaJira" type="text" formControlName="historiaJira" placeholder="Código de Jira">
+    <div id="components-container" formArrayName="componentes">
+      <div
+        *ngFor="let componente of componentes.controls; let i = index"
+        [formGroupName]="i"
+      >
+        <app-dynamic-content
+          [dynamicForm]="getComponenteFormGroup(i)"
+          (remove)="removeComponent(i)"
+        >
+        </app-dynamic-content>
       </div>
     </div>
-    <div>
-      <label for="historia">HISTORIA</label>
-      <input id="historia" type="text" formControlName="historia" placeholder="Nombre de la historia">
-    </div>
-  </div>
 
-  <div formArrayName="componentes">
-    <div *ngFor="let componente of componentes.controls; let i = index" [formGroupName]="i">
-      <app-dynamic-content
-        [dynamicForm]="getComponenteFormGroup(i)"
-        (remove)="removeComponent(i)">
-      </app-dynamic-content>
+    <div class="action-buttons">
+      <button
+        id="add-component"
+        class="add-component"
+        type="button"
+        (click)="addComponent()"
+      >
+        <img src="assets/icons/addIcon.svg" alt="Añadir" />
+      </button>
+      <button id="save-button" class="save-button" type="submit">
+        Guardar
+      </button>
     </div>
-  </div>
-  
-  <div class="action-buttons">
-    <button type="button" (click)="addComponent()">Agregar Componente</button>
-    <button type="submit">Guardar</button>
-  </div>
-</form>
+  </form>
+</div>

@@ -2,13 +2,6 @@ body {
   font-family: Arial, sans-serif;
   margin: 20px;
 }
-
-h1#gestionTitle {
-  color: white;
-  text-shadow: -1px -1px 1px black, 1px -1px 1px black, -1px 1px 1px black,
-    1px 1px 1px black;
-}
-
 .fixed-header {
   margin-bottom: 20px;
   padding: 15px;
@@ -16,8 +9,12 @@ h1#gestionTitle {
   border-radius: 5px;
   background: #e7f3ff;
 }
-
-.fixed-header input {
+.fixed-header .row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.fixed-header .row input {
   flex: 1;
   padding: 8px;
   border: 1px solid #ccc;
@@ -35,7 +32,47 @@ h1#gestionTitle {
 .fixed-header input[name="historiaJira"] {
   max-width: 15ch;
 }
-
+.component {
+  margin-bottom: 20px;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background: #f9f9f9;
+}
+.component .row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.component label {
+  font-size: 14px;
+  white-space: nowrap;
+}
+.component input,
+.component select {
+  font-size: 14px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  flex: 1;
+}
+.component .remove-component {
+  background: #dc3545;
+  color: #fff;
+  padding: 8px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+.component .remove-component:hover {
+  background: #a71d2a;
+}
 .action-buttons {
   display: flex;
   gap: 10px;

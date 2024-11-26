@@ -1,33 +1,69 @@
-<div [formGroup]="dynamicForm" class="row">
-    <label for="tarea">Tarea</label>
-    <select id="tarea" formControlName="tarea">
-      <option value="prompt_hu">Prompt HU</option>
-      <option value="documentar">Documentar</option>
-      <option value="refactorizar">Refactorizar</option>
-      <option value="test_unitarios">Test Unitarios</option>
-    </select>
-  
-    <label for="aplicaIa">Aplica IA?</label>
-    <select id="aplicaIa" formControlName="aplicaIa">
-      <option value="yes">Sí</option>
-      <option value="no">No</option>
-    </select>
-  
-    <label for="usadaIa">Usada IA?</label>
-    <select id="usadaIa" formControlName="usadaIa">
-      <option value="yes">Sí</option>
-      <option value="no">No</option>
-    </select>
-  
-    <label for="calidadSalidaIa">Calidad Salida IA</label>
-    <input id="calidadSalidaIa" type="text" formControlName="calidadSalidaIa" placeholder="Calidad de salida de la IA">
-  
-    <label for="estimacionSinIa">Estimación sin IA</label>
-    <input id="estimacionSinIa" type="number" formControlName="estimacionSinIa" placeholder="Días sin IA">
-  
-    <label for="estimacionConIa">Estimación con IA</label>
-    <input id="estimacionConIa" type="number" formControlName="estimacionConIa" placeholder="Días con IA">
-  
-    <button type="button" class="remove-component" (click)="removeComponent()">Eliminar</button>
+<div class="component">
+  <div
+    [formGroup]="dynamicForm"
+    class="d-flex flex-row flex-wrap justify-content-around"
+  >
+    <div class="col-12 col-lg-4 col-xl-2 col-md-4 col-sm-12 me-2">
+      <label for="tarea" class="col-12">Prompt</label>
+      <select id="tarea" class="col-12" formControlName="tarea">
+        <option value="prompt_hu">Prompt HU</option>
+        <option value="documentar">Documentar</option>
+        <option value="refactorizar">Refactorizar</option>
+        <option value="test_unitarios">Test Unitarios</option>
+      </select>
+    </div>
+    <div class="col-12 col-lg-4 col-xl-1 col-md-4 col-sm-12 me-2">
+      <label for="aplicaIa" class="col-12">Aplica IA?</label>
+      <select id="aplicaIa" class="col-12" formControlName="aplicaIa">
+        <option value="yes">Sí</option>
+        <option value="no">No</option>
+      </select>
+    </div>
+    <div class="col-12 col-lg-4 col-xl-1 col-md-4 col-sm-12 me-2">
+      <label for="usadaIa" class="col-12">Usada IA?</label>
+      <select id="usadaIa" class="col-12" formControlName="usadaIa">
+        <option value="yes">Sí</option>
+        <option value="no">No</option>
+      </select>
+    </div>
+    <div class="col-12 col-lg-4 col-xl-4 col-md-4 col-sm-12 me-2">
+      <label for="calidadSalidaIa" class="col-12">Calidad Salida IA (0-10)</label>
+      <input
+        id="calidadSalidaIa"
+        type="number"
+        class="col-12"
+        formControlName="calidadSalidaIa"
+        placeholder="5"
+      />
+    </div>
+    <div class="col-12 col-lg-4 col-xl-1 col-md-4 col-sm-12 me-2">
+      <label for="estimacionSinIa" class="col-12">Estimación sin IA (h)</label>
+      <input
+        id="estimacionSinIa"
+        type="number"
+        class="col-12"
+        formControlName="estimacionSinIa"
+        placeholder="0"
+      />
+    </div>
+    <div class="col-12 col-lg-4 col-xl-1 col-md-4 col-sm-12 me-md-2">
+      <label for="estimacionConIa" class="col-12">Estimación con IA (h)</label>
+      <input
+        id="estimacionConIa"
+        type="number"
+        class="col-12"
+        formControlName="estimacionConIa"
+        placeholder="0"
+      />
+    </div>
+    <div class="delete-Btn col-12 col-lg-4 col-xl-1 col-md-12 col-sm-12">
+      <button
+        type="button"
+        class="remove-component"
+        (click)="removeComponent()"
+      >
+        <img src="assets/icons/deleteIcon.svg" alt="Borrar" />
+      </button>
+    </div>
   </div>
-  
+</div>
