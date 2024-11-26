@@ -21,10 +21,11 @@
     "target": "ES2022",
     "module": "ES2022",
     "paths": {
-      "@environments/*": ["src/app/share/environments/*"],
-      //"@core/*": ["src/app/core/*"],
-      "@models/*": ["src/app/share/models/*"],
-      "@services/*": ["src/share/services/*"]
+      "@environments/*": ["src/app/core/environments/*"],
+      "@core/*": ["src/app/core/*"],
+      "@models/*": ["src/app/core/models/*"],
+      "@services/*": ["src/app/core/services/*"],
+      "@constants/*": ["src/app/core/constants/*"]
     }
   },
   "angularCompilerOptions": {
