@@ -1,3 +1,4 @@
+import { Prompt } from '@core/models/prompt';
 import { HistoriaJira } from '@models/historiaJira';
 import { Proyectos } from '@models/proyectos';
 import { Sprint } from '@models/sprint';
@@ -42,10 +43,29 @@ export const MOCK_HISTORIAS_JIRA: HistoriaJira[] = [
   },
   {
     id: 1,
-    descripcion: 'Historia 1',
+    descripcion: 'Historia 2',
   },
   {
     id: 2,
-    descripcion: 'Historia 2',
+    descripcion: 'Historia 3',
+  },
+];
+
+export const MOCK_PROMT: Prompt[] = [
+  {
+    id: 0,
+    prompt: 'Prompt HU',
+  },
+  {
+    id: 1,
+    prompt: 'Documentar',
+  },
+  {
+    id: 2,
+    prompt: 'Refactorizar',
+  },
+  {
+    id: 3,
+    prompt: 'Test Unitarios',
   },
 ];

@@ -5,5 +5,6 @@ export interface EstimacionIA {
   sprintId: number;
   tareaId: number;
   owner: string;
-  medicionesPorPrompt: MedicionesPorPrompt;
+  notas?: string;
+  medicionesPorPrompt: MedicionesPorPrompt[];
 }
