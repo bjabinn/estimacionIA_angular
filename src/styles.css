@@ -9,3 +9,39 @@ body {
 .cdk-overlay-pane {
   background: white;
 }
+
+/*FORM CONTENT*/
+.fixed-header input,
+.fixed-header mat-select,
+.component mat-select {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ccc;
+  background: #fff;
+  border-radius: 4px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  -ms-border-radius: 4px;
+  -o-border-radius: 4px;
+}
+
+.fixed-header mat-select.mat-mdc-select-disabled,
+.component mat-select.mat-mdc-select-disabled {
+  background: #ccc;
+  color: grey;
+  /*border: 1px solid #313131;*/
+}
+
+.fixed-header mat-select.loading,
+.combo-prompt mat-select.loading {
+  /*background: #ffa61f !important;*/
+  color: #ce8e18 !important;
+  border: 1px solid #ff9900;
+}
+
+.fixed-header mat-select.error,
+.combo-prompt mat-select.error {
+  /*background: #fa624e !important;*/
+  color: #992828 !important;
+  border: 1px solid #ff0000;
+}

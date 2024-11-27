@@ -5,7 +5,10 @@ body {
 
 h1#gestionTitle {
   color: white;
-  text-shadow: -1px -1px 1px black, 1px -1px 1px black, -1px 1px 1px black,
+  text-shadow:
+    -1px -1px 1px black,
+    1px -1px 1px black,
+    -1px 1px 1px black,
     1px 1px 1px black;
 }
 
@@ -17,29 +20,16 @@ h1#gestionTitle {
   background: #e7f3ff;
 }
 
-.fixed-header input,
-.fixed-header mat-select {
-  flex: 1;
-  padding: 8px;
-  border: 1px solid #ccc;
-  background: #fff;
-  border-radius: 4px;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  -ms-border-radius: 4px;
-  -o-border-radius: 4px;
-}
-
 .fixed-header label {
   font-weight: bold;
 }
-.fixed-header input[name="proyecto"] {
+.fixed-header input[name='proyecto'] {
   max-width: 35ch;
 }
-.fixed-header input[name="sprint"] {
+.fixed-header input[name='sprint'] {
   max-width: 20ch;
 }
-.fixed-header input[name="historiaJira"] {
+.fixed-header input[name='historiaJira'] {
   max-width: 15ch;
 }
 

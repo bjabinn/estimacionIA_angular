@@ -8,11 +8,11 @@
           <mat-select
             id="proyecto"
             class="col-12"
+            [ngClass]="proyectoProcess"
             [(value)]="selectedProyect"
             (selectionChange)="onSelectionProyectoChange($event)"
             formControlName="proyecto"
-            placeholder="Selecciona un Proyecto"
-          >
+            [placeholder]="returnPlaceholder('un proyecto', 'los proyectos')">
             <mat-option *ngFor="let proyecto of proyectos" [value]="proyecto">{{
               proyecto.nombre
             }}</mat-option>
@@ -23,11 +23,11 @@
           <mat-select
             id="sprint"
             class="col-12"
+            [ngClass]="sprintProcess"
             [(value)]="selectedProyect"
-            (selectionChange)="onSelectionProyectoChange($event)"
+            (selectionChange)="onSelectionSprintsChange($event)"
             formControlName="sprint"
-            placeholder="Selecciona un Sprint"
-          >
+            [placeholder]="returnPlaceholder('un sprint', 'los sprints')">
             <mat-option *ngFor="let sprint of sprints" [value]="sprint">{{
               sprint.nombre
             }}</mat-option>
@@ -38,11 +38,13 @@
           <mat-select
             id="historiaJira"
             class="col-12"
+            [ngClass]="historiaJiraProcess"
             [(value)]="selectedProyect"
-            (selectionChange)="onSelectionProyectoChange($event)"
+            (selectionChange)="onSelectionHistoriaJiraChange($event)"
             formControlName="historiaJira"
-            placeholder="Selecciona un Código de Jira"
-          >
+            [placeholder]="
+              returnPlaceholder('un código de Jira', 'los códigos de Jira')
+            ">
             <mat-option
               *ngFor="let historiaJira of historiasJira"
               [value]="historiaJira"
@@ -59,8 +61,7 @@
             type="text"
             class="col-12"
             formControlName="owner"
-            placeholder="Tu nombre"
-          />
+            placeholder="Tu nombre" />
         </div>
         <div class="col-8">
           <label for="notas" class="col-12">NOTAS</label>
@@ -69,8 +70,7 @@
             type="text"
             class="col-12"
             formControlName="notas"
-            placeholder="Añade alguna nota (Opcional)"
-          />
+            placeholder="Añade alguna nota (Opcional)" />
         </div>
       </div>
     </div>
@@ -78,12 +78,10 @@
     <div id="components-container" formArrayName="componentes">
       <div
         *ngFor="let componente of componentes.controls; let i = index"
-        [formGroupName]="i"
-      >
+        [formGroupName]="i">
         <app-dynamic-content
           [dynamicForm]="getComponenteFormGroup(i)"
-          (remove)="removeComponent(i)"
-        >
+          (remove)="removeComponent(i)">
         </app-dynamic-content>
       </div>
     </div>
@@ -93,8 +91,7 @@
         id="add-component"
         class="add-component"
         type="button"
-        (click)="addComponent()"
-      >
+        (click)="addComponent()">
         <img src="assets/icons/addIcon.svg" alt="Añadir" />
       </button>
       <button id="save-button" class="save-button" type="submit">
