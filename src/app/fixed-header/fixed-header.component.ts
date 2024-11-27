@@ -52,7 +52,9 @@ import { MedicionesPorPrompt } from '@core/models/medicionesPorPrompt';
 export class FixedHeaderComponent implements OnInit {
   projectForm!: FormGroup;
   proyectos: Proyectos[] = [];
-  selectedProyect: any;
+  selectedProyect = '';
+  selectedSprint = '';
+  selectedHistoriaJira = '';
   sprints: Sprint[] = [];
   historiasJira: HistoriaJira[] = [];
   proyectoProcess = COMBO_STATUS.STANDBY;

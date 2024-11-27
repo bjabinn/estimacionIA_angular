@@ -24,7 +24,7 @@
             id="sprint"
             class="col-12"
             [ngClass]="sprintProcess"
-            [(value)]="selectedProyect"
+            [(value)]="selectedSprint"
             (selectionChange)="onSelectionSprintsChange($event)"
             formControlName="sprint"
             [placeholder]="returnPlaceholder('un sprint', 'los sprints')">
@@ -39,7 +39,7 @@
             id="historiaJira"
             class="col-12"
             [ngClass]="historiaJiraProcess"
-            [(value)]="selectedProyect"
+            [(value)]="selectedHistoriaJira"
             (selectionChange)="onSelectionHistoriaJiraChange($event)"
             formControlName="historiaJira"
             [placeholder]="
