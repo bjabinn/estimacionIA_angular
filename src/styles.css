@@ -47,6 +47,7 @@ body {
 }
 
 input.ng-invalid:not(.ng-untouched),
+select.ng-invalid:not(.ng-untouched),
 mat-select.ng-invalid:not(.ng-untouched) {
   border: 1px solid #ff0000 !important;
 }

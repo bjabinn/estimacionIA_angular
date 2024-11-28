@@ -75,6 +75,8 @@
             id="owner"
             type="text"
             class="col-12"
+            minlength="8"
+            maxlength="20"
             formControlName="owner"
             placeholder="Inserta el nombre del responsable *" />
           <mat-error
@@ -95,6 +97,7 @@
             type="text"
             class="col-12"
             formControlName="notas"
+            maxlength="255"
             placeholder="Añade alguna nota (Opcional)" />
           <mat-error
             class="error-required"

@@ -94,7 +94,12 @@ export class FixedHeaderComponent implements OnInit {
       historiaJira: ['', Validators.required],
       owner: [
         '',
-        [Validators.required, Validators.maxLength(5), customPatternValidator],
+        [
+          Validators.required,
+          Validators.minLength(8),
+          Validators.maxLength(20),
+          customPatternValidator,
+        ],
       ],
       notas: ['', [Validators.maxLength(255), customPatternValidator]],
       componentes: this.formBuilder.array([]), // FormArray para manejar componentes dinámicos
