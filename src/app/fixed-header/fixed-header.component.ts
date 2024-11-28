@@ -22,17 +22,22 @@ import { HistoriaJira } from '@models/historiaJira';
 import { DataGeneralService } from '@services/dataGeneral.service';
 import {
   COMBO_STATUS,
+  DEF_PATTERN_ERROR,
+  DEF_REQUIRED_ERROR,
   DEFAULT_ERROR_MAIN,
   DEV_MODE,
   ERROR_SAVE_MSG,
+  VALID_CHARACTERS_REGEX,
 } from '@constants/general.const';
 import {
   MOCK_HISTORIAS_JIRA,
   MOCK_PROYECTOS,
   MOCK_SPRINTS,
 } from '@constants/mock-general';
-import { EstimacionIA } from '@core/models/estimacionIA';
-import { MedicionesPorPrompt } from '@core/models/medicionesPorPrompt';
+import { EstimacionIA } from '@models/estimacionIA';
+import { MedicionesPorPrompt } from '@models/medicionesPorPrompt';
+import { FormControlsService } from '@services/formControls.service';
+import { customPatternValidator } from '@validators/custom-pattern.validator';
 
 @Component({
   selector: 'app-fixed-header',
@@ -60,6 +65,8 @@ export class FixedHeaderComponent implements OnInit {
   proyectoProcess = COMBO_STATUS.STANDBY;
   sprintProcess = COMBO_STATUS.STANDBY;
   historiaJiraProcess = COMBO_STATUS.STANDBY;
+  msgErrorRequired = DEF_REQUIRED_ERROR;
+  msgErrorPattern = DEF_PATTERN_ERROR;
 
   // Obtener el FormArray de componentes y asegurar que los controles son de tipo FormGroup
   get componentes(): FormArray {
@@ -68,7 +75,8 @@ export class FixedHeaderComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private dataGeneralService: DataGeneralService
+    private dataGeneralService: DataGeneralService,
+    private formControlsService: FormControlsService
   ) {
     sessionStorage.clear();
     this.createForm();
@@ -84,8 +92,11 @@ export class FixedHeaderComponent implements OnInit {
       proyecto: ['', Validators.required],
       sprint: ['', Validators.required],
       historiaJira: ['', Validators.required],
-      owner: ['', Validators.required],
-      notas: [''],
+      owner: [
+        '',
+        [Validators.required, Validators.maxLength(5), customPatternValidator],
+      ],
+      notas: ['', [Validators.maxLength(255), customPatternValidator]],
       componentes: this.formBuilder.array([]), // FormArray para manejar componentes dinámicos
     });
 
@@ -251,6 +262,10 @@ export class FixedHeaderComponent implements OnInit {
       formatComponentes.push(valores);
     });
     return formatComponentes;
+  }
+
+  callHandleError(input: string, error: string, formG: FormGroup) {
+    return this.formControlsService.hasFormError(input, error, formG);
   }
 
   // Método para resetear el formulario

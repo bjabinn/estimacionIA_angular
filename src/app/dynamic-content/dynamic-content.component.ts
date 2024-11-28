@@ -8,12 +8,14 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import {
   COMBO_STATUS,
+  DEF_REQUIRED_ERROR,
   DEFAULT_ERROR_MAIN,
   DEV_MODE,
 } from '@core/constants/general.const';
 import { MOCK_PROMT } from '@core/constants/mock-general';
 import { Prompt } from '@core/models/prompt';
 import { DataGeneralService } from '@core/services/dataGeneral.service';
+import { FormControlsService } from '@core/services/formControls.service';
 import { StorageService } from '@core/services/storage/storage.service';
 
 @Component({
@@ -37,8 +39,12 @@ export class DynamicContentComponent implements OnInit {
   promptStatus = COMBO_STATUS.STANDBY;
   selectedPrompt!: Prompt;
   prompts: Prompt[] = [];
+  msgErrorRequired = DEF_REQUIRED_ERROR;
 
-  constructor(private dataGeneralService: DataGeneralService) {}
+  constructor(
+    private dataGeneralService: DataGeneralService,
+    private formControlsService: FormControlsService
+  ) {}
 
   ngOnInit(): void {
     this.getData();
@@ -89,6 +95,10 @@ export class DynamicContentComponent implements OnInit {
   }
 
   onSelectionPromptChange(event: any) {}
+
+  callHandleError(input: string, error: string, formG: FormGroup) {
+    return this.formControlsService.hasFormError(input, error, formG);
+  }
 
   // Método para emitir el evento de eliminación
   removeComponent() {
