@@ -11,25 +11,46 @@
         [(value)]="selectedPrompt"
         (selectionChange)="onSelectionPromptChange($event)"
         formControlName="tarea"
-        [placeholder]="returnPlaceholder('un prompt', 'los prompt')">
+        [placeholder]="returnPlaceholder('un prompt *', 'los prompt')">
         <mat-option *ngFor="let prompt of prompts" [value]="prompt">{{
           prompt.prompt
         }}</mat-option>
       </mat-select>
+      <mat-error
+        class="error-required"
+        *ngIf="callHandleError('tarea', 'required', dynamicForm)"
+        >{{ msgErrorRequired }}</mat-error
+      >
     </div>
     <div class="col-12 col-lg-4 col-xl-1 col-md-4 col-sm-12 me-2">
       <label for="aplicaIa" class="col-12">Aplica IA?</label>
-      <select id="aplicaIa" class="col-12" formControlName="aplicaIa">
+      <select
+        id="aplicaIa"
+        class="col-12"
+        formControlName="aplicaIa"
+        placeholder="Sí/No *">
+        <option value="" disabled selected>Sí/No *</option>
         <option value="yes">Sí</option>
         <option value="no">No</option>
       </select>
+      <mat-error
+        class="error-required"
+        *ngIf="callHandleError('aplicaIa', 'required', dynamicForm)"
+        >{{ msgErrorRequired }}</mat-error
+      >
     </div>
     <div class="col-12 col-lg-4 col-xl-1 col-md-4 col-sm-12 me-2">
       <label for="usadaIa" class="col-12">Usada IA?</label>
       <select id="usadaIa" class="col-12" formControlName="usadaIa">
+        <option value="" disabled selected>Sí/No *</option>
         <option value="yes">Sí</option>
         <option value="no">No</option>
       </select>
+      <mat-error
+        class="error-required"
+        *ngIf="callHandleError('usadaIa', 'required', dynamicForm)"
+        >{{ msgErrorRequired }}</mat-error
+      >
     </div>
     <div class="col-12 col-lg-4 col-xl-4 col-md-4 col-sm-12 me-2">
       <label for="calidadSalidaIa" class="col-12"
@@ -40,7 +61,12 @@
         type="number"
         class="col-12"
         formControlName="calidadSalidaIa"
-        placeholder="5" />
+        placeholder="5 *" />
+      <mat-error
+        class="error-required"
+        *ngIf="callHandleError('calidadSalidaIa', 'required', dynamicForm)"
+        >{{ msgErrorRequired }}</mat-error
+      >
     </div>
     <div class="col-12 col-lg-4 col-xl-1 col-md-4 col-sm-12 me-2">
       <label for="estimacionSinIa" class="col-12">Estimación sin IA (h)</label>
@@ -49,7 +75,12 @@
         type="number"
         class="col-12"
         formControlName="estimacionSinIa"
-        placeholder="0" />
+        placeholder="0 *" />
+      <mat-error
+        class="error-required"
+        *ngIf="callHandleError('estimacionSinIa', 'required', dynamicForm)"
+        >{{ msgErrorRequired }}</mat-error
+      >
     </div>
     <div class="col-12 col-lg-4 col-xl-1 col-md-4 col-sm-12 me-md-2">
       <label for="estimacionConIa" class="col-12">Estimación con IA (h)</label>
@@ -58,7 +89,12 @@
         type="number"
         class="col-12"
         formControlName="estimacionConIa"
-        placeholder="0" />
+        placeholder="0 *" />
+      <mat-error
+        class="error-required"
+        *ngIf="callHandleError('estimacionConIa', 'required', dynamicForm)"
+        >{{ msgErrorRequired }}</mat-error
+      >
     </div>
     <div class="delete-Btn col-12 col-lg-4 col-xl-1 col-md-12 col-sm-12">
       <button

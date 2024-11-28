@@ -39,10 +39,10 @@ h1#gestionTitle {
   margin-top: 20px;
 }
 .add-component {
-  background: #28a745;
+  background: #8ac470;
   color: #fff;
   padding: 10px;
-  border: none;
+  border: 1px solid #28a745;
   border-radius: 4px;
   cursor: pointer;
   display: flex;

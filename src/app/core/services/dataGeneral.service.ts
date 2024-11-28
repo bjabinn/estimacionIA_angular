@@ -34,6 +34,8 @@ export class DataGeneralService {
 
   guardarDatosIA(params: EstimacionIA): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.post<EstimacionIA>(`${this.backUrl}/estimación`, { headers });
+    return this.http.post<EstimacionIA>(`${this.backUrl}/estimación`, params, {
+      headers,
+    });
   }
 }

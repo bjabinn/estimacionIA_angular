@@ -45,3 +45,13 @@ body {
   color: #992828 !important;
   border: 1px solid #ff0000;
 }
+
+input.ng-invalid:not(.ng-untouched),
+mat-select.ng-invalid:not(.ng-untouched) {
+  border: 1px solid #ff0000 !important;
+}
+
+.error-required {
+  color: #b90000 !important;
+  text-shadow: 0 0 0 red;
+}

@@ -12,11 +12,16 @@
             [(value)]="selectedProyect"
             (selectionChange)="onSelectionProyectoChange($event)"
             formControlName="proyecto"
-            [placeholder]="returnPlaceholder('un proyecto', 'los proyectos')">
+            [placeholder]="returnPlaceholder('un proyecto *', 'los proyectos')">
             <mat-option *ngFor="let proyecto of proyectos" [value]="proyecto">{{
               proyecto.nombre
             }}</mat-option>
           </mat-select>
+          <mat-error
+            class="error-required"
+            *ngIf="callHandleError('proyecto', 'required', projectForm)"
+            >{{ msgErrorRequired }}</mat-error
+          >
         </div>
         <div class="col-4">
           <label for="sprint" class="col-12">SPRINT</label>
@@ -27,11 +32,16 @@
             [(value)]="selectedSprint"
             (selectionChange)="onSelectionSprintsChange($event)"
             formControlName="sprint"
-            [placeholder]="returnPlaceholder('un sprint', 'los sprints')">
+            [placeholder]="returnPlaceholder('un sprint *', 'los sprints')">
             <mat-option *ngFor="let sprint of sprints" [value]="sprint">{{
               sprint.nombre
             }}</mat-option>
           </mat-select>
+          <mat-error
+            class="error-required"
+            *ngIf="callHandleError('sprint', 'required', projectForm)"
+            >{{ msgErrorRequired }}</mat-error
+          >
         </div>
         <div class="col-4">
           <label for="historiaJira" class="col-12">HISTORIA JIRA</label>
@@ -43,7 +53,7 @@
             (selectionChange)="onSelectionHistoriaJiraChange($event)"
             formControlName="historiaJira"
             [placeholder]="
-              returnPlaceholder('un código de Jira', 'los códigos de Jira')
+              returnPlaceholder('un código de Jira *', 'los códigos de Jira')
             ">
             <mat-option
               *ngFor="let historiaJira of historiasJira"
@@ -51,6 +61,11 @@
               >{{ historiaJira.descripcion }}</mat-option
             >
           </mat-select>
+          <mat-error
+            class="error-required"
+            *ngIf="callHandleError('historiaJira', 'required', projectForm)"
+            >{{ msgErrorRequired }}</mat-error
+          >
         </div>
       </div>
       <div class="row mt-1">
@@ -61,7 +76,17 @@
             type="text"
             class="col-12"
             formControlName="owner"
-            placeholder="Tu nombre" />
+            placeholder="Inserta el nombre del responsable *" />
+          <mat-error
+            class="error-required"
+            *ngIf="callHandleError('owner', 'required', projectForm)"
+            >{{ msgErrorRequired }}</mat-error
+          >
+          <mat-error
+            class="error-required"
+            *ngIf="callHandleError('owner', 'invalidPattern', projectForm)"
+            >{{ msgErrorPattern }}</mat-error
+          >
         </div>
         <div class="col-8">
           <label for="notas" class="col-12">NOTAS</label>
@@ -71,6 +96,11 @@
             class="col-12"
             formControlName="notas"
             placeholder="Añade alguna nota (Opcional)" />
+          <mat-error
+            class="error-required"
+            *ngIf="callHandleError('notas', 'invalidPattern', projectForm)"
+            >{{ msgErrorPattern }}</mat-error
+          >
         </div>
       </div>
     </div>
