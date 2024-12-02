@@ -4,18 +4,26 @@
     class="d-flex flex-row flex-wrap justify-content-around">
     <div class="col-12 col-lg-4 col-xl-2 col-md-4 col-sm-12 me-2 combo-prompt">
       <label for="tarea" class="col-12">Prompt</label>
-      <mat-select
+      <input
+        type="text"
         id="tarea"
         class="col-12"
+        mat-input
         [ngClass]="promptStatus"
-        [(value)]="selectedPrompt"
-        (selectionChange)="onSelectionPromptChange($event)"
         formControlName="tarea"
-        [placeholder]="returnPlaceholder('un prompt *', 'los prompt')">
-        <mat-option *ngFor="let prompt of prompts" [value]="prompt">{{
-          prompt.prompt
-        }}</mat-option>
-      </mat-select>
+        [placeholder]="returnPlaceholder('un prompt *', 'los prompt')"
+        [matAutocomplete]="autoTarea" />
+      <mat-autocomplete
+        #autoTarea="matAutocomplete"
+        (optionSelected)="onSelectionPromptChange($event)"
+        [displayWith]="displayTxt">
+        <mat-option
+          *ngFor="let prompt of promptsFiltered | async"
+          [value]="prompt"
+          >{{ prompt.prompt }}</mat-option
+        >
+      </mat-autocomplete>
+
       <mat-error
         class="error-required"
         *ngIf="callHandleError('tarea', 'required', dynamicForm)"
@@ -61,7 +69,7 @@
         type="number"
         class="col-12"
         formControlName="calidadSalidaIa"
-        placeholder="5 *" />
+        placeholder="5" />
       <mat-error
         class="error-required"
         *ngIf="callHandleError('calidadSalidaIa', 'required', dynamicForm)"
@@ -75,7 +83,7 @@
         type="number"
         class="col-12"
         formControlName="estimacionSinIa"
-        placeholder="0 *" />
+        placeholder="0" />
       <mat-error
         class="error-required"
         *ngIf="callHandleError('estimacionSinIa', 'required', dynamicForm)"
@@ -89,7 +97,7 @@
         type="number"
         class="col-12"
         formControlName="estimacionConIa"
-        placeholder="0 *" />
+        placeholder="0" />
       <mat-error
         class="error-required"
         *ngIf="callHandleError('estimacionConIa', 'required', dynamicForm)"

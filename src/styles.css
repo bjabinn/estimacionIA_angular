@@ -26,32 +26,43 @@ body {
 }
 
 .fixed-header mat-select.mat-mdc-select-disabled,
+.fixed-header input:disabled,
 .component mat-select.mat-mdc-select-disabled {
   background: #ccc;
   color: grey;
   /*border: 1px solid #313131;*/
 }
 
+/*.fixed-header mat-select.success,
+.fixed-header input.success,
+.combo-prompt mat-select.success {
+  color: #6ace18 !important;
+  border: 1px solid rgb(41, 112, 0) !important;
+}*/
+
+.fixed-header input.loading,
 .fixed-header mat-select.loading,
 .combo-prompt mat-select.loading {
   /*background: #ffa61f !important;*/
   color: #ce8e18 !important;
-  border: 1px solid #ff9900;
+  border: 1px solid #ff9900 !important;
 }
 
+.fixed-header input.error,
 .fixed-header mat-select.error,
 .combo-prompt mat-select.error {
   /*background: #fa624e !important;*/
   color: #992828 !important;
-  border: 1px solid #ff0000;
+  border: 1px solid #ff0000 !important;
 }
 
 input.ng-invalid:not(.ng-untouched),
+select.ng-invalid:not(.ng-untouched),
 mat-select.ng-invalid:not(.ng-untouched) {
   border: 1px solid #ff0000 !important;
 }
 
 .error-required {
   color: #b90000 !important;
-  text-shadow: 0 0 0 red;
+  text-shadow: 0 0 0 red !important;
 }
