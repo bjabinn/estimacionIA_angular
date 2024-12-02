@@ -5,18 +5,26 @@
       <div class="row d-flex flex-row justify-content-around">
         <div class="col-4">
           <label for="proyecto" class="col-12">PROYECTO</label>
-          <mat-select
+          <input
+            type="text"
             id="proyecto"
             class="col-12"
+            mat-input
             [ngClass]="proyectoProcess"
-            [(value)]="selectedProyect"
-            (selectionChange)="onSelectionProyectoChange($event)"
             formControlName="proyecto"
-            [placeholder]="returnPlaceholder('un proyecto *', 'los proyectos')">
-            <mat-option *ngFor="let proyecto of proyectos" [value]="proyecto">{{
-              proyecto.nombre
-            }}</mat-option>
-          </mat-select>
+            [placeholder]="returnPlaceholder('un proyecto *', 'los proyectos')"
+            [matAutocomplete]="autoProyecto" />
+          <mat-autocomplete
+            #autoProyecto="matAutocomplete"
+            (optionSelected)="onSelectionProyectoChange($event)"
+            [displayWith]="displayTxt">
+            <mat-option
+              *ngFor="let proyecto of proyectosFiltered | async"
+              [value]="proyecto"
+              >{{ proyecto.nombre }}</mat-option
+            >
+          </mat-autocomplete>
+
           <mat-error
             class="error-required"
             *ngIf="callHandleError('proyecto', 'required', projectForm)"
@@ -25,18 +33,26 @@
         </div>
         <div class="col-4">
           <label for="sprint" class="col-12">SPRINT</label>
-          <mat-select
+          <input
+            type="text"
             id="sprint"
             class="col-12"
+            mat-input
             [ngClass]="sprintProcess"
-            [(value)]="selectedSprint"
-            (selectionChange)="onSelectionSprintsChange($event)"
             formControlName="sprint"
-            [placeholder]="returnPlaceholder('un sprint *', 'los sprints')">
-            <mat-option *ngFor="let sprint of sprints" [value]="sprint">{{
-              sprint.nombre
-            }}</mat-option>
-          </mat-select>
+            [placeholder]="returnPlaceholder('un sprint *', 'los sprints')"
+            [matAutocomplete]="autoSprint" />
+          <mat-autocomplete
+            #autoSprint="matAutocomplete"
+            (optionSelected)="onSelectionSprintsChange($event)"
+            [displayWith]="displayTxt">
+            <mat-option
+              *ngFor="let sprint of sprintFiltered | async"
+              [value]="sprint"
+              >{{ sprint.nombre }}</mat-option
+            >
+          </mat-autocomplete>
+
           <mat-error
             class="error-required"
             *ngIf="callHandleError('sprint', 'required', projectForm)"
@@ -45,22 +61,28 @@
         </div>
         <div class="col-4">
           <label for="historiaJira" class="col-12">HISTORIA JIRA</label>
-          <mat-select
+          <input
+            type="text"
             id="historiaJira"
             class="col-12"
+            mat-input
             [ngClass]="historiaJiraProcess"
-            [(value)]="selectedHistoriaJira"
-            (selectionChange)="onSelectionHistoriaJiraChange($event)"
             formControlName="historiaJira"
             [placeholder]="
               returnPlaceholder('un código de Jira *', 'los códigos de Jira')
-            ">
+            "
+            [matAutocomplete]="autoHistoriaJira" />
+          <mat-autocomplete
+            #autoHistoriaJira="matAutocomplete"
+            (optionSelected)="onSelectionHistoriaJiraChange($event)"
+            [displayWith]="displayTxt">
             <mat-option
-              *ngFor="let historiaJira of historiasJira"
+              *ngFor="let historiaJira of historiaJiraFiltered | async"
               [value]="historiaJira"
               >{{ historiaJira.descripcion }}</mat-option
             >
-          </mat-select>
+          </mat-autocomplete>
+
           <mat-error
             class="error-required"
             *ngIf="callHandleError('historiaJira', 'required', projectForm)"

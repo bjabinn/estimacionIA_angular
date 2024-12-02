@@ -17,3 +17,4 @@ export const DEF_REQUIRED_ERROR = 'Este campo es obligatorio';
 
 //Patrones REGEX
 export const VALID_CHARACTERS_REGEX = /^[a-zA-Z0-9 áéíóúÁÉÍÓÚüÜñÑ.,]*$/;
+export const ALPHANUM_REGEX = /^[a-zA-Z ]+$/;

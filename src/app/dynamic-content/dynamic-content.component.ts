@@ -7,11 +7,14 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import {
+  ALPHANUM_REGEX,
   COMBO_STATUS,
   DEF_REQUIRED_ERROR,
   DEFAULT_ERROR_MAIN,
   DEV_MODE,
 } from '@core/constants/general.const';
+import { Observable } from 'rxjs';
+import { startWith, map } from 'rxjs/operators';
 import { MOCK_PROMT } from '@core/constants/mock-general';
 import { Prompt } from '@core/models/prompt';
 import { DataGeneralService } from '@core/services/dataGeneral.service';
@@ -37,9 +40,10 @@ export class DynamicContentComponent implements OnInit {
   @Output() remove = new EventEmitter<void>(); // Emite un evento para eliminar el componente
 
   promptStatus = COMBO_STATUS.STANDBY;
-  selectedPrompt!: Prompt;
   prompts: Prompt[] = [];
+  promptsFiltered: Observable<Prompt[]> = new Observable<Prompt[]>();
   msgErrorRequired = DEF_REQUIRED_ERROR;
+  patronAlfaNum = ALPHANUM_REGEX;
 
   constructor(
     private dataGeneralService: DataGeneralService,
@@ -58,7 +62,9 @@ export class DynamicContentComponent implements OnInit {
       this.prompts = JSON.parse(sessionStorage.getItem('promptCombo') || '');
       this.promptStatus = COMBO_STATUS.SUCCESS;
       this.dynamicForm.get('tarea')?.enable();
+      this.setFilters('tarea');
     }
+
     console.log('complemento', this.prompts);
 
     if (this.prompts.length < 1) {
@@ -68,6 +74,7 @@ export class DynamicContentComponent implements OnInit {
           this.dynamicForm.get('tarea')?.enable();
           this.promptStatus = COMBO_STATUS.SUCCESS;
           this.prompts = data;
+          this.setFilters('tarea');
         },
         error: (error: any) => {
           if (DEV_MODE) {
@@ -75,6 +82,7 @@ export class DynamicContentComponent implements OnInit {
             console.error(`${DEFAULT_ERROR_MAIN} los prompts \n Error:`, error);
             this.prompts = MOCK_PROMT;
             this.dynamicForm.get('tarea')?.enable();
+            this.setFilters('tarea');
             sessionStorage.setItem('promptCombo', JSON.stringify(MOCK_PROMT));
           } else {
             this.promptStatus = COMBO_STATUS.ERROR;
@@ -98,6 +106,27 @@ export class DynamicContentComponent implements OnInit {
 
   callHandleError(input: string, error: string, formG: FormGroup) {
     return this.formControlsService.hasFormError(input, error, formG);
+  }
+
+  setFilters(type: string) {
+    this.promptsFiltered = this.dynamicForm.get(type)!.valueChanges.pipe(
+      startWith(''),
+      map((value: any) => this.filterOptions(value, type))
+    );
+  }
+  // Funciones Autocomplete
+  private filterOptions(input: string, type: string): any[] {
+    const filteredValue = this.patronAlfaNum.test(input)
+      ? input.toLowerCase()
+      : input;
+    return this.prompts.filter(option =>
+      option.prompt.toLowerCase().includes(filteredValue)
+    );
+  }
+
+  displayTxt(autoValue: Prompt): string {
+    console.log(autoValue);
+    return autoValue ? autoValue.prompt : '';
   }
 
   // Método para emitir el evento de eliminación
