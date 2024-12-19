@@ -56,13 +56,13 @@ export class DynamicContentComponent implements OnInit {
 
   getData() {
     this.promptStatus = COMBO_STATUS.LOADING;
-    this.dynamicForm.get('tarea')?.disable();
+    this.dynamicForm.get('prompt')?.disable();
 
     if (sessionStorage.getItem('promptCombo')) {
       this.prompts = JSON.parse(sessionStorage.getItem('promptCombo') || '');
       this.promptStatus = COMBO_STATUS.SUCCESS;
-      this.dynamicForm.get('tarea')?.enable();
-      this.setFilters('tarea');
+      this.dynamicForm.get('prompt')?.enable();
+      this.setFilters('prompt');
     }
 
     console.log('complemento', this.prompts);
@@ -71,24 +71,24 @@ export class DynamicContentComponent implements OnInit {
       this.dataGeneralService.getPromt().subscribe({
         next: (data: Prompt[]) => {
           sessionStorage.setItem('promptCombo', JSON.stringify(data));
-          this.dynamicForm.get('tarea')?.enable();
+          this.dynamicForm.get('prompt')?.enable();
           this.promptStatus = COMBO_STATUS.SUCCESS;
           this.prompts = data;
-          this.setFilters('tarea');
+          this.setFilters('prompt');
         },
         error: (error: any) => {
           if (DEV_MODE) {
             this.promptStatus = COMBO_STATUS.SUCCESS;
             console.error(`${DEFAULT_ERROR_MAIN} los prompts \n Error:`, error);
             this.prompts = MOCK_PROMT;
-            this.dynamicForm.get('tarea')?.enable();
-            this.setFilters('tarea');
+            this.dynamicForm.get('prompt')?.enable();
+            this.setFilters('prompt');
             sessionStorage.setItem('promptCombo', JSON.stringify(MOCK_PROMT));
           } else {
             this.promptStatus = COMBO_STATUS.ERROR;
             console.error(`${DEFAULT_ERROR_MAIN} los prompts \n Error:`, error);
             this.prompts = [];
-            this.dynamicForm.get('tarea')?.disable();
+            this.dynamicForm.get('prompt')?.disable();
             sessionStorage.setItem('promptCombo', '');
           }
         },

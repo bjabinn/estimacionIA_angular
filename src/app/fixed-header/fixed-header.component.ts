@@ -172,7 +172,7 @@ export class FixedHeaderComponent implements OnInit {
   // Método para agregar un nuevo componente (formulario)
   addComponent() {
     const componenteForm = this.formBuilder.group({
-      tarea: ['', Validators.required],
+      prompt: ['', Validators.required],
       aplicaIa: ['', Validators.required],
       usadaIa: ['', Validators.required],
       calidadSalidaIa: ['',[Validators.min(0),Validators.max(10)]],
@@ -330,9 +330,9 @@ export class FixedHeaderComponent implements OnInit {
     const componentes = this.projectForm.value.componentes;
     let formatComponentes: any[] = [];
     componentes.forEach((comp: any) => {
-      if (comp.tarea?.id !== '' && comp.aplicaIa !== '' && comp.usadaIa !== '') {
+      if (comp.prompt?.id !== '' && comp.aplicaIa !== '' && comp.usadaIa !== '') {
         const valores = {
-          promptId: comp.tarea?.id,
+          promptId: comp.prompt?.id,
           aplicaIa: comp.aplicaIa,
           usadaIa: comp.usadaIa,
           calidadSalidaIa: comp.calidadSalidaIa,
