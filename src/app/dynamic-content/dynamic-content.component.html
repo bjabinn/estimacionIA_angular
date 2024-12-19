@@ -70,11 +70,13 @@
         class="col-12"
         formControlName="calidadSalidaIa"
         placeholder="5" />
-      <mat-error
+        <mat-error
         class="error-required"
-        *ngIf="callHandleError('calidadSalidaIa', 'required', dynamicForm)"
-        >{{ msgErrorRequired }}</mat-error
+        *ngIf="dynamicForm.get('calidadSalidaIa')?.hasError('min') || dynamicForm.get('calidadSalidaIa')?.hasError('max')"
       >
+        El valor debe estar entre 0 y 10
+      </mat-error>
+      
     </div>
     <div class="col-12 col-lg-4 col-xl-1 col-md-4 col-sm-12 me-2">
       <label for="estimacionSinIa" class="col-12">Estimación sin IA (h)</label>

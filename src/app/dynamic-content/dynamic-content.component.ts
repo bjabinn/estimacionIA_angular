@@ -116,7 +116,7 @@ export class DynamicContentComponent implements OnInit {
   }
   // Funciones Autocomplete
   private filterOptions(input: string, type: string): any[] {
-    const filteredValue = this.patronAlfaNum.test(input)
+    const filteredValue = input && this.patronAlfaNum.test(input)
       ? input.toLowerCase()
       : input;
     return this.prompts.filter(option =>

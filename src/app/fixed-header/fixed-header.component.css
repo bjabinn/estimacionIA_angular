@@ -67,3 +67,14 @@ h1#gestionTitle {
 .save-button:hover {
   background: #0056b3;
 }
+
+.cleanButton{
+  background-color: rgb(183, 1, 1);
+  color: white;
+  border-radius: 5px;
+  border: none;
+
+  &:hover{
+    background-color: rgb(210, 1, 1);
+  }
+}
