@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -21,6 +21,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { Proyectos } from '@models/proyectos';
 import { Sprint } from '@models/sprint';
 import { HistoriaJira } from '@models/historiaJira';
+import { Prompt } from '@models/prompt';
 import { DataGeneralService } from '@services/dataGeneral.service';
 import {
   COMBO_STATUS,
@@ -36,6 +37,7 @@ import {
   MOCK_HISTORIAS_JIRA,
   MOCK_PROYECTOS,
   MOCK_SPRINTS,
+  MOCK_PROMT,
 } from '@constants/mock-general';
 import { EstimacionIA } from '@models/estimacionIA';
 import { MedicionesPorPrompt } from '@models/medicionesPorPrompt';
@@ -58,6 +60,8 @@ import { customPatternValidator } from '@validators/custom-pattern.validator';
   ],
 })
 export class FixedHeaderComponent implements OnInit {
+  @ViewChild(DynamicContentComponent) dynamicContentComponent!: DynamicContentComponent;
+
   projectForm!: FormGroup;
   proyectos: Proyectos[] = [];
   sprints: Sprint[] = [];
@@ -196,8 +200,9 @@ export class FixedHeaderComponent implements OnInit {
 
   // Método  para realizar acciones tras seleccionar un valor
   onSelectionProyectoChange(event: any) {
+    const projectId = event.option.value.id;
     this.sprintProcess = COMBO_STATUS.LOADING;
-    this.dataGeneralService.getSprints(event.option.value.id).subscribe({
+    this.dataGeneralService.getSprints(projectId).subscribe({
       next: (data: Sprint[]) => {
         this.sprintProcess = COMBO_STATUS.SUCCESS;
         this.sprints = data;
@@ -218,6 +223,27 @@ export class FixedHeaderComponent implements OnInit {
         }
       },
     });
+
+    this.dataGeneralService.getPromptsByProjectId(projectId).subscribe({
+      next: (data: Prompt[]) => {
+        sessionStorage.setItem('promptCombo', JSON.stringify(data));
+        this.dynamicContentComponent.prompts = data;
+        this.dynamicContentComponent.setFilters('prompt');
+      },
+      error: (error: any) => {
+        if (DEV_MODE) {
+          console.error(`${DEFAULT_ERROR_MAIN} los prompts \n Error:`, error);
+          this.dynamicContentComponent.prompts = MOCK_PROMT;
+          this.dynamicContentComponent.setFilters('prompt');
+          sessionStorage.setItem('promptCombo', JSON.stringify(MOCK_PROMT));
+        } else {
+          console.error(`${DEFAULT_ERROR_MAIN} los prompts \n Error:`, error);
+          this.dynamicContentComponent.prompts = [];
+          sessionStorage.setItem('promptCombo', '');
+        }
+      },
+    });
+
   }
 
   onSelectionSprintsChange(event: any) {
