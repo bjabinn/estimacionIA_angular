@@ -68,6 +68,11 @@ h1#gestionTitle {
   background: #0056b3;
 }
 
+.save-button img{
+  width: 32px;
+  height: 32px;
+}
+
 .cleanButton{
   background-color: rgb(183, 1, 1);
   color: white;
@@ -76,5 +81,11 @@ h1#gestionTitle {
 
   &:hover{
     background-color: rgb(210, 1, 1);
+  }
+
+  img{
+    width: 40px;
+    height: 40px;
+    padding: 5%;
   }
 }

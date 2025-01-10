@@ -127,10 +127,11 @@ export class FixedHeaderComponent implements OnInit {
 
   getData() {
     this.proyectoProcess = COMBO_STATUS.LOADING;
-    this.dataGeneralService.getProyectos().subscribe({
+    this.dataGeneralService.getProyectos().subscribe({      
       next: (data: Proyectos[]) => {
         this.proyectoProcess = COMBO_STATUS.SUCCESS;
         this.proyectos = data;
+        this.proyectos.sort((a,b) => a.nombre.localeCompare(b.nombre))
         this.projectForm.get('proyecto')?.enable();
         this.setFilters('proyecto');
       },
@@ -206,6 +207,7 @@ export class FixedHeaderComponent implements OnInit {
       next: (data: Sprint[]) => {
         this.sprintProcess = COMBO_STATUS.SUCCESS;
         this.sprints = data;
+        this.sprints.sort((a,b) => a.nombre.localeCompare(b.nombre))
         this.setFilters('sprint');
         this.projectForm.get('sprint')?.enable();
       },
@@ -227,7 +229,7 @@ export class FixedHeaderComponent implements OnInit {
     this.dataGeneralService.getPromptsByProjectId(projectId).subscribe({
       next: (data: Prompt[]) => {
         sessionStorage.setItem('promptCombo', JSON.stringify(data));
-        this.dynamicContentComponent.prompts = data;
+        this.dynamicContentComponent.prompts = data.sort((a,b) => a.prompt.localeCompare(b.prompt));
         this.dynamicContentComponent.setFilters('prompt');
       },
       error: (error: any) => {
@@ -251,7 +253,11 @@ export class FixedHeaderComponent implements OnInit {
     this.dataGeneralService.getHistoriaJira(event.option.value.id).subscribe({
       next: (data: HistoriaJira[]) => {
         this.historiaJiraProcess = COMBO_STATUS.SUCCESS;
+        // console.log("Antes de ordenar: "+ JSON.stringify(data));
+        // this.historiasJira = data.sort(((a,b) => a.descripcion.localeCompare(b.descripcion)));
+        // console.log("Despues de ordenar: "+JSON.stringify(this.historiasJira));
         this.historiasJira = data;
+        this.historiasJira.sort((a,b) => a.descripcion.localeCompare(b.descripcion))
         this.setFilters('historiaJira');
         this.projectForm.get('historiaJira')?.enable();
       },

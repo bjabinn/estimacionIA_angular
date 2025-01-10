@@ -60,6 +60,7 @@ export class DynamicContentComponent implements OnInit {
 
     if (sessionStorage.getItem('promptCombo')) {
       this.prompts = JSON.parse(sessionStorage.getItem('promptCombo') || '');
+      this.prompts.sort((a,b) => a.prompt.localeCompare(b.prompt))
       this.promptStatus = COMBO_STATUS.SUCCESS;
       this.dynamicForm.get('prompt')?.enable();
       this.setFilters('prompt');
@@ -74,6 +75,7 @@ export class DynamicContentComponent implements OnInit {
           this.dynamicForm.get('prompt')?.enable();
           this.promptStatus = COMBO_STATUS.SUCCESS;
           this.prompts = data;
+          this.prompts.sort((a,b) => a.prompt.localeCompare(b.prompt))
           this.setFilters('prompt');
         },
         error: (error: any) => {
