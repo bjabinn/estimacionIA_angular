@@ -82,6 +82,7 @@ export class FixedHeaderComponent implements OnInit {
   patronAlfaNum = ALPHANUM_REGEX;
   hayComplementos: boolean = false;
   promptCounter:number = 0;
+  idProyecto: number = 10;
 
   // Obtener el FormArray de componentes y asegurar que los controles son de tipo FormGroup
   get componentes(): FormArray {
@@ -202,6 +203,11 @@ export class FixedHeaderComponent implements OnInit {
   // Método  para realizar acciones tras seleccionar un valor
   onSelectionProyectoChange(event: any) {
     const projectId = event.option.value.id;
+    this.projectForm.get('prompt')?.enable();
+    this.dynamicContentComponent.onProyectoSelected(event);
+    // this.idProyecto = projectId;
+    // console.log(this.idProyecto);
+    
     this.sprintProcess = COMBO_STATUS.LOADING;
     this.dataGeneralService.getSprints(projectId).subscribe({
       next: (data: Sprint[]) => {

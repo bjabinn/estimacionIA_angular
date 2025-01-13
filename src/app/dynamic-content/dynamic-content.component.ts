@@ -36,6 +36,8 @@ import { StorageService } from '@core/services/storage/storage.service';
   ],
 })
 export class DynamicContentComponent implements OnInit {
+  @Input()
+  idProyecto!: number;
   @Input() dynamicForm: FormGroup = new FormGroup({}); // Asignar un valor inicial
   @Output() remove = new EventEmitter<void>(); // Emite un evento para eliminar el componente
 
@@ -45,6 +47,10 @@ export class DynamicContentComponent implements OnInit {
   msgErrorRequired = DEF_REQUIRED_ERROR;
   patronAlfaNum = ALPHANUM_REGEX;
 
+  onProyectoSelected(event: any){
+    this.dynamicForm.get('prompt')?.enable();
+  }
+
   constructor(
     private dataGeneralService: DataGeneralService,
     private formControlsService: FormControlsService
@@ -52,16 +58,20 @@ export class DynamicContentComponent implements OnInit {
 
   ngOnInit(): void {
     this.getData();
+    console.log(this.idProyecto);
+      
   }
 
   getData() {
-    this.promptStatus = COMBO_STATUS.LOADING;
+    //this.promptStatus = COMBO_STATUS.LOADING;
     this.dynamicForm.get('prompt')?.disable();
+    this.promptStatus = this.dynamicForm.get('prompt')?.disabled ? COMBO_STATUS.STANDBY : COMBO_STATUS.SUCCESS;
+
 
     if (sessionStorage.getItem('promptCombo')) {
       this.prompts = JSON.parse(sessionStorage.getItem('promptCombo') || '');
       this.prompts.sort((a,b) => a.prompt.localeCompare(b.prompt))
-      this.promptStatus = COMBO_STATUS.SUCCESS;
+      //this.promptStatus = COMBO_STATUS.SUCCESS;
       this.dynamicForm.get('prompt')?.enable();
       this.setFilters('prompt');
     }
@@ -72,8 +82,6 @@ export class DynamicContentComponent implements OnInit {
       this.dataGeneralService.getPromt().subscribe({
         next: (data: Prompt[]) => {
           sessionStorage.setItem('promptCombo', JSON.stringify(data));
-          this.dynamicForm.get('prompt')?.enable();
-          this.promptStatus = COMBO_STATUS.SUCCESS;
           this.prompts = data;
           this.prompts.sort((a,b) => a.prompt.localeCompare(b.prompt))
           this.setFilters('prompt');

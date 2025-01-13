@@ -12,7 +12,8 @@
         [ngClass]="promptStatus"
         formControlName="prompt"
         [placeholder]="returnPlaceholder('un prompt *', 'los prompt')"
-        [matAutocomplete]="autoTarea" />
+        [matAutocomplete]="autoTarea"
+        />
       <mat-autocomplete
         #autoTarea="matAutocomplete"
         (optionSelected)="onSelectionPromptChange($event)"

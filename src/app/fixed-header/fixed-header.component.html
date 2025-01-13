@@ -24,7 +24,6 @@
               >{{ proyecto.nombre }}</mat-option
             >
           </mat-autocomplete>
-
           <mat-error
             class="error-required"
             *ngIf="callHandleError('proyecto', 'required', projectForm)"
@@ -97,8 +96,8 @@
             id="owner"
             type="email"
             class="col-12"
-            minlength="8"
-            maxlength="20"
+            minlength="3"
+            maxlength="254"
             formControlName="owner"
             placeholder="Email del responsable *" />
             <mat-error
@@ -131,7 +130,9 @@
         [formGroupName]="i">
         <app-dynamic-content
           [dynamicForm]="getComponenteFormGroup(i)"
-          (remove)="removeComponent(i)">
+          (remove)="removeComponent(i)"
+          [idProyecto]="idProyecto"
+          >
         </app-dynamic-content>
       </div>
     </div>
