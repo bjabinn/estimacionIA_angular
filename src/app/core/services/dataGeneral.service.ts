@@ -32,9 +32,13 @@ export class DataGeneralService {
     return this.http.get<Prompt[]>(`${this.backUrl}/prompts`);
   }
 
+  getPromptsByProjectId(projectId: number): Observable<Prompt[]> {
+    return this.http.get<Prompt[]>(`${this.backUrl}/proyectos/${projectId}/prompts`);
+  }
+  
   guardarDatosIA(params: EstimacionIA): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.post<EstimacionIA>(`${this.backUrl}/estimación`, params, {
+    return this.http.post<EstimacionIA>(`${this.backUrl}/estimacion`, params, {
       headers,
     });
   }

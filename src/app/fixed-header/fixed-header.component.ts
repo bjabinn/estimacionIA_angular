@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -8,7 +8,7 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { startWith, map } from 'rxjs/operators';
+import { startWith, map, max } from 'rxjs/operators';
 import { DynamicContentComponent } from '../dynamic-content/dynamic-content.component';
 //Material
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -21,6 +21,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { Proyectos } from '@models/proyectos';
 import { Sprint } from '@models/sprint';
 import { HistoriaJira } from '@models/historiaJira';
+import { Prompt } from '@models/prompt';
 import { DataGeneralService } from '@services/dataGeneral.service';
 import {
   COMBO_STATUS,
@@ -36,6 +37,7 @@ import {
   MOCK_HISTORIAS_JIRA,
   MOCK_PROYECTOS,
   MOCK_SPRINTS,
+  MOCK_PROMT,
 } from '@constants/mock-general';
 import { EstimacionIA } from '@models/estimacionIA';
 import { MedicionesPorPrompt } from '@models/medicionesPorPrompt';
@@ -58,6 +60,8 @@ import { customPatternValidator } from '@validators/custom-pattern.validator';
   ],
 })
 export class FixedHeaderComponent implements OnInit {
+  @ViewChild(DynamicContentComponent) dynamicContentComponent!: DynamicContentComponent;
+
   projectForm!: FormGroup;
   proyectos: Proyectos[] = [];
   sprints: Sprint[] = [];
@@ -76,6 +80,9 @@ export class FixedHeaderComponent implements OnInit {
   msgErrorRequired = DEF_REQUIRED_ERROR;
   msgErrorPattern = DEF_PATTERN_ERROR;
   patronAlfaNum = ALPHANUM_REGEX;
+  hayComplementos: boolean = false;
+  promptCounter:number = 0;
+  idProyecto: number = 10;
 
   // Obtener el FormArray de componentes y asegurar que los controles son de tipo FormGroup
   get componentes(): FormArray {
@@ -92,7 +99,8 @@ export class FixedHeaderComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getData();
+    this.getData(); 
+    this.addComponent();   
   }
 
   // Crear el formulario reactivo con validadores básicos
@@ -105,10 +113,9 @@ export class FixedHeaderComponent implements OnInit {
         '',
         [
           Validators.required,
-          Validators.minLength(8),
-          Validators.maxLength(20),
-          customPatternValidator,
-        ],
+          Validators.email,
+          Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
+        ]
       ],
       notas: ['', [Validators.maxLength(255), customPatternValidator]],
       componentes: this.formBuilder.array([]), // FormArray para manejar componentes dinámicos
@@ -121,10 +128,11 @@ export class FixedHeaderComponent implements OnInit {
 
   getData() {
     this.proyectoProcess = COMBO_STATUS.LOADING;
-    this.dataGeneralService.getProyectos().subscribe({
+    this.dataGeneralService.getProyectos().subscribe({      
       next: (data: Proyectos[]) => {
         this.proyectoProcess = COMBO_STATUS.SUCCESS;
         this.proyectos = data;
+        this.proyectos.sort((a,b) => a.nombre.localeCompare(b.nombre))
         this.projectForm.get('proyecto')?.enable();
         this.setFilters('proyecto');
       },
@@ -166,27 +174,46 @@ export class FixedHeaderComponent implements OnInit {
   getComponenteFormGroup(index: number): FormGroup {
     return this.componentes.at(index) as FormGroup;
   }
-
+  
   // Método para agregar un nuevo componente (formulario)
   addComponent() {
     const componenteForm = this.formBuilder.group({
-      tarea: ['', Validators.required],
+      prompt: ['', Validators.required],
       aplicaIa: ['', Validators.required],
       usadaIa: ['', Validators.required],
-      calidadSalidaIa: [''],
+      calidadSalidaIa: ['',[Validators.min(0),Validators.max(10)]],
       estimacionSinIa: [null, Validators.min(0)],
       estimacionConIa: [null, Validators.min(0)],
     });
     this.componentes.push(componenteForm);
+    this.promptCounter += 1;  
+    this.havePrompts();
   }
+
+  //Calcula si hay complementos según el contador
+  havePrompts(){
+     if (this.promptCounter > 0) {
+       this.hayComplementos = true;
+     }else{
+       this.hayComplementos = false;
+     }
+     return this.hayComplementos;
+   }
 
   // Método  para realizar acciones tras seleccionar un valor
   onSelectionProyectoChange(event: any) {
+    const projectId = event.option.value.id;
+    this.projectForm.get('prompt')?.enable();
+    this.dynamicContentComponent.onProyectoSelected(event);
+    // this.idProyecto = projectId;
+    // console.log(this.idProyecto);
+    
     this.sprintProcess = COMBO_STATUS.LOADING;
-    this.dataGeneralService.getSprints(event.option.value.id).subscribe({
+    this.dataGeneralService.getSprints(projectId).subscribe({
       next: (data: Sprint[]) => {
         this.sprintProcess = COMBO_STATUS.SUCCESS;
         this.sprints = data;
+        this.sprints.sort((a,b) => a.nombre.localeCompare(b.nombre))
         this.setFilters('sprint');
         this.projectForm.get('sprint')?.enable();
       },
@@ -204,6 +231,27 @@ export class FixedHeaderComponent implements OnInit {
         }
       },
     });
+
+    this.dataGeneralService.getPromptsByProjectId(projectId).subscribe({
+      next: (data: Prompt[]) => {
+        sessionStorage.setItem('promptCombo', JSON.stringify(data));
+        this.dynamicContentComponent.prompts = data.sort((a,b) => a.prompt.localeCompare(b.prompt));
+        this.dynamicContentComponent.setFilters('prompt');
+      },
+      error: (error: any) => {
+        if (DEV_MODE) {
+          console.error(`${DEFAULT_ERROR_MAIN} los prompts \n Error:`, error);
+          this.dynamicContentComponent.prompts = MOCK_PROMT;
+          this.dynamicContentComponent.setFilters('prompt');
+          sessionStorage.setItem('promptCombo', JSON.stringify(MOCK_PROMT));
+        } else {
+          console.error(`${DEFAULT_ERROR_MAIN} los prompts \n Error:`, error);
+          this.dynamicContentComponent.prompts = [];
+          sessionStorage.setItem('promptCombo', '');
+        }
+      },
+    });
+
   }
 
   onSelectionSprintsChange(event: any) {
@@ -211,7 +259,11 @@ export class FixedHeaderComponent implements OnInit {
     this.dataGeneralService.getHistoriaJira(event.option.value.id).subscribe({
       next: (data: HistoriaJira[]) => {
         this.historiaJiraProcess = COMBO_STATUS.SUCCESS;
+        // console.log("Antes de ordenar: "+ JSON.stringify(data));
+        // this.historiasJira = data.sort(((a,b) => a.descripcion.localeCompare(b.descripcion)));
+        // console.log("Despues de ordenar: "+JSON.stringify(this.historiasJira));
         this.historiasJira = data;
+        this.historiasJira.sort((a,b) => a.descripcion.localeCompare(b.descripcion))
         this.setFilters('historiaJira');
         this.projectForm.get('historiaJira')?.enable();
       },
@@ -252,14 +304,20 @@ export class FixedHeaderComponent implements OnInit {
 
   // Método para eliminar un componente (formulario)
   removeComponent(index: number) {
-    this.componentes.removeAt(index);
+    if (this.componentes.length > 1) {
+      this.componentes.removeAt(index);
+    }else{
+      alert('Debe haber minimo 1 complemento');
+    }
+    // this.promptCounter -= 1;
+    // this.havePrompts();
   }
 
   // Lógica para guardar o procesar los datos del formulario
-  onSubmit() {
+  onSubmit() {    
     console.log('Datos del formulario RAW:', this.projectForm.value);
-    if (this.projectForm.valid) {
-      const formContent = this.projectForm.value;
+    if (this.projectForm.value) {
+      const formContent = this.projectForm.value;      
       const guardarIA: EstimacionIA = {
         proyectoId: formContent.proyecto?.id,
         sprintId: formContent.sprint?.id,
@@ -268,19 +326,38 @@ export class FixedHeaderComponent implements OnInit {
         notas: formContent.notas,
         medicionesPorPrompt: this.getComponentes(),
       };
+      
       console.log('Datos del formulario:', guardarIA);
-      this.dataGeneralService.guardarDatosIA(guardarIA).subscribe({
-        next: (resp: any) => {
-          alert('[Main] Se ha guardado correctamente');
-          console.log('[Main] Se ha guardado correctamente', resp);
-          this.resetForm();
-        },
-        error: (error: any) => {
-          const errorMsg = ERROR_SAVE_MSG;
-          console.log(errorMsg, error);
-          alert(`${errorMsg} \n ${JSON.stringify(error)}`);
-        },
-      });
+
+      const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      console.log(guardarIA.medicionesPorPrompt.length);
+      if (
+          guardarIA.proyectoId != undefined &&
+          guardarIA.sprintId != undefined &&
+          guardarIA.tareaId != undefined && 
+          guardarIA.owner != "" &&
+          emailPattern.test(guardarIA.owner) &&
+          guardarIA.medicionesPorPrompt.length > 0
+        ) {
+        // console.log(guardarIA);
+        // console.log(guardarIA.medicionesPorPrompt[0].promptId);
+        
+        this.dataGeneralService.guardarDatosIA(guardarIA).subscribe({
+          next: (resp: any) => {
+            alert('[Main] Se ha guardado correctamente');
+            console.log('[Main] Se ha guardado correctamente', resp);
+            this.resetForm();
+            this.addComponent();
+          },
+          error: (error: any) => {
+            const errorMsg = ERROR_SAVE_MSG;
+            console.log(errorMsg, error);
+            alert(`${errorMsg} \n ${JSON.stringify(error)}`);
+          },
+        });
+      }else{
+        alert('Antes de guardar debes rellenar los campos obligatorios');
+      }
     } else {
       alert('Por favor, complete todos los campos requeridos.');
     }
@@ -291,17 +368,21 @@ export class FixedHeaderComponent implements OnInit {
     const componentes = this.projectForm.value.componentes;
     let formatComponentes: any[] = [];
     componentes.forEach((comp: any) => {
-      const valores = {
-        promptId: comp.tarea?.id,
-        aplicaIa: comp.aplicaIa,
-        usadaIa: comp.usadaIa,
-        calidadSalidaIa: comp.calidadSalidaIa,
-        estimacionSinIa: comp.estimacionSinIa,
-        estimacionConIa: comp.estimacionConIa,
-      };
-      formatComponentes.push(valores);
+      if (comp.prompt?.id !== '' && comp.aplicaIa !== '' && comp.usadaIa !== '') {
+        const valores = {
+          promptId: comp.prompt?.id,
+          aplicaIa: comp.aplicaIa,
+          usadaIa: comp.usadaIa,
+          calidadSalidaIa: comp.calidadSalidaIa,
+          estimacionSinIa: comp.estimacionSinIa,
+          estimacionConIa: comp.estimacionConIa,
+        };
+        formatComponentes.push(valores);
+      }
+      
     });
     return formatComponentes;
+    
   }
 
   callHandleError(input: string, error: string, formG: FormGroup) {
@@ -312,9 +393,9 @@ export class FixedHeaderComponent implements OnInit {
 
   // Método  para filtrar el contenido de los combos
   private filterOptions(input: string, type: string): any[] {
-    const filteredValue = this.patronAlfaNum.test(input)
-      ? input.toLowerCase()
-      : input;
+    
+    const filteredValue = input && this.patronAlfaNum.test(input)
+      ? input.toLowerCase(): input;
     let resp: any[] = [];
     if (type === 'proyecto')
       resp = this.proyectos.filter(option =>
@@ -328,7 +409,7 @@ export class FixedHeaderComponent implements OnInit {
       resp = this.historiasJira.filter(option =>
         option.descripcion.toLowerCase().includes(filteredValue)
       );
-
+    
     return resp;
   }
 
@@ -346,6 +427,10 @@ export class FixedHeaderComponent implements OnInit {
   resetForm() {
     this.projectForm.reset();
     this.componentes.clear(); // Limpiar componentes dinámicos
+    this.projectForm.get('sprint')?.disable();
+    this.projectForm.get('historiaJira')?.disable();
     sessionStorage.setItem('promptCombo', '');
+    this.getData(); //Vuelve a solicitar los datos de la BBDD
   }
+
 }

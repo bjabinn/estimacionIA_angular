@@ -36,6 +36,8 @@ import { StorageService } from '@core/services/storage/storage.service';
   ],
 })
 export class DynamicContentComponent implements OnInit {
+  @Input()
+  idProyecto!: number;
   @Input() dynamicForm: FormGroup = new FormGroup({}); // Asignar un valor inicial
   @Output() remove = new EventEmitter<void>(); // Emite un evento para eliminar el componente
 
@@ -45,6 +47,10 @@ export class DynamicContentComponent implements OnInit {
   msgErrorRequired = DEF_REQUIRED_ERROR;
   patronAlfaNum = ALPHANUM_REGEX;
 
+  onProyectoSelected(event: any){
+    this.dynamicForm.get('prompt')?.enable();
+  }
+
   constructor(
     private dataGeneralService: DataGeneralService,
     private formControlsService: FormControlsService
@@ -52,17 +58,22 @@ export class DynamicContentComponent implements OnInit {
 
   ngOnInit(): void {
     this.getData();
+    console.log(this.idProyecto);
+      
   }
 
   getData() {
-    this.promptStatus = COMBO_STATUS.LOADING;
-    this.dynamicForm.get('tarea')?.disable();
+    //this.promptStatus = COMBO_STATUS.LOADING;
+    this.dynamicForm.get('prompt')?.disable();
+    this.promptStatus = this.dynamicForm.get('prompt')?.disabled ? COMBO_STATUS.STANDBY : COMBO_STATUS.SUCCESS;
+
 
     if (sessionStorage.getItem('promptCombo')) {
       this.prompts = JSON.parse(sessionStorage.getItem('promptCombo') || '');
-      this.promptStatus = COMBO_STATUS.SUCCESS;
-      this.dynamicForm.get('tarea')?.enable();
-      this.setFilters('tarea');
+      this.prompts.sort((a,b) => a.prompt.localeCompare(b.prompt))
+      //this.promptStatus = COMBO_STATUS.SUCCESS;
+      this.dynamicForm.get('prompt')?.enable();
+      this.setFilters('prompt');
     }
 
     console.log('complemento', this.prompts);
@@ -71,24 +82,23 @@ export class DynamicContentComponent implements OnInit {
       this.dataGeneralService.getPromt().subscribe({
         next: (data: Prompt[]) => {
           sessionStorage.setItem('promptCombo', JSON.stringify(data));
-          this.dynamicForm.get('tarea')?.enable();
-          this.promptStatus = COMBO_STATUS.SUCCESS;
           this.prompts = data;
-          this.setFilters('tarea');
+          this.prompts.sort((a,b) => a.prompt.localeCompare(b.prompt))
+          this.setFilters('prompt');
         },
         error: (error: any) => {
           if (DEV_MODE) {
             this.promptStatus = COMBO_STATUS.SUCCESS;
             console.error(`${DEFAULT_ERROR_MAIN} los prompts \n Error:`, error);
             this.prompts = MOCK_PROMT;
-            this.dynamicForm.get('tarea')?.enable();
-            this.setFilters('tarea');
+            this.dynamicForm.get('prompt')?.enable();
+            this.setFilters('prompt');
             sessionStorage.setItem('promptCombo', JSON.stringify(MOCK_PROMT));
           } else {
             this.promptStatus = COMBO_STATUS.ERROR;
             console.error(`${DEFAULT_ERROR_MAIN} los prompts \n Error:`, error);
             this.prompts = [];
-            this.dynamicForm.get('tarea')?.disable();
+            this.dynamicForm.get('prompt')?.disable();
             sessionStorage.setItem('promptCombo', '');
           }
         },
@@ -116,7 +126,7 @@ export class DynamicContentComponent implements OnInit {
   }
   // Funciones Autocomplete
   private filterOptions(input: string, type: string): any[] {
-    const filteredValue = this.patronAlfaNum.test(input)
+    const filteredValue = input && this.patronAlfaNum.test(input)
       ? input.toLowerCase()
       : input;
     return this.prompts.filter(option =>

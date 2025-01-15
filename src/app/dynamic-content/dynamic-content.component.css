@@ -19,7 +19,15 @@
   border: 1px solid #ccc;
   border-radius: 4px;
   flex: 1;
+
 }
+
+input:disabled{
+  background-color: #cacaca;
+  color: #a0a0a0;
+  cursor: not-allowed;
+}
+
 .component .remove-component {
   background: #dc3545;
   color: #fff;

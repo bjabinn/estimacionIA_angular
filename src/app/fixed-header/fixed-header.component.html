@@ -4,7 +4,7 @@
     <div class="fixed-header">
       <div class="row d-flex flex-row justify-content-around">
         <div class="col-4">
-          <label for="proyecto" class="col-12">PROYECTO</label>
+          <label for="proyecto" class="col-12">SQUAD</label>
           <input
             type="text"
             id="proyecto"
@@ -12,7 +12,7 @@
             mat-input
             [ngClass]="proyectoProcess"
             formControlName="proyecto"
-            [placeholder]="returnPlaceholder('un proyecto *', 'los proyectos')"
+            [placeholder]="returnPlaceholder('una squad *', 'las squads')"
             [matAutocomplete]="autoProyecto" />
           <mat-autocomplete
             #autoProyecto="matAutocomplete"
@@ -24,7 +24,6 @@
               >{{ proyecto.nombre }}</mat-option
             >
           </mat-autocomplete>
-
           <mat-error
             class="error-required"
             *ngIf="callHandleError('proyecto', 'required', projectForm)"
@@ -92,25 +91,20 @@
       </div>
       <div class="row mt-1">
         <div class="col-4">
-          <label for="owner" class="col-12">RESPONSABLE TAREA</label>
+          <label for="owner" class="col-12">EMAIL RESPONSABLE</label>
           <input
             id="owner"
-            type="text"
+            type="email"
             class="col-12"
-            minlength="8"
-            maxlength="20"
+            minlength="3"
+            maxlength="254"
             formControlName="owner"
-            placeholder="Inserta el nombre del responsable *" />
-          <mat-error
-            class="error-required"
-            *ngIf="callHandleError('owner', 'required', projectForm)"
-            >{{ msgErrorRequired }}</mat-error
-          >
-          <mat-error
-            class="error-required"
-            *ngIf="callHandleError('owner', 'invalidPattern', projectForm)"
-            >{{ msgErrorPattern }}</mat-error
-          >
+            placeholder="Email del responsable *" />
+            <mat-error
+              class="error-required"
+              *ngIf="projectForm.get('owner')?.hasError('email') || callHandleError('owner', 'required', projectForm)">
+              Por Favor, ingrese un email válido
+            </mat-error>
         </div>
         <div class="col-8">
           <label for="notas" class="col-12">NOTAS</label>
@@ -136,7 +130,9 @@
         [formGroupName]="i">
         <app-dynamic-content
           [dynamicForm]="getComponenteFormGroup(i)"
-          (remove)="removeComponent(i)">
+          (remove)="removeComponent(i)"
+          [idProyecto]="idProyecto"
+          >
         </app-dynamic-content>
       </div>
     </div>
@@ -147,10 +143,15 @@
         class="add-component"
         type="button"
         (click)="addComponent()">
-        <img src="assets/icons/addIcon.svg" alt="Añadir" />
+        <img src="assets/icons/addIcon.svg" alt="Añadir" title="Añadir"/>
       </button>
+
       <button id="save-button" class="save-button" type="submit">
-        Guardar
+        <img src="assets/icons/saveIcon.png" alt="Guardar" title="Guardar">
+      </button>
+
+      <button type="button" class="cleanButton" (click)="[resetForm(),addComponent()]">
+        <img src="assets/icons/cleanIcon2.png" alt="Limpiar" title="Limpiar">
       </button>
     </div>
   </form>

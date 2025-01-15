@@ -3,16 +3,17 @@
     [formGroup]="dynamicForm"
     class="d-flex flex-row flex-wrap justify-content-around">
     <div class="col-12 col-lg-4 col-xl-2 col-md-4 col-sm-12 me-2 combo-prompt">
-      <label for="tarea" class="col-12">Prompt</label>
+      <label for="prompt" class="col-12">Prompt</label>
       <input
         type="text"
-        id="tarea"
+        id="prompt"
         class="col-12"
         mat-input
         [ngClass]="promptStatus"
-        formControlName="tarea"
+        formControlName="prompt"
         [placeholder]="returnPlaceholder('un prompt *', 'los prompt')"
-        [matAutocomplete]="autoTarea" />
+        [matAutocomplete]="autoTarea"
+        />
       <mat-autocomplete
         #autoTarea="matAutocomplete"
         (optionSelected)="onSelectionPromptChange($event)"
@@ -26,7 +27,7 @@
 
       <mat-error
         class="error-required"
-        *ngIf="callHandleError('tarea', 'required', dynamicForm)"
+        *ngIf="callHandleError('prompt', 'required', dynamicForm)"
         >{{ msgErrorRequired }}</mat-error
       >
     </div>
@@ -70,11 +71,13 @@
         class="col-12"
         formControlName="calidadSalidaIa"
         placeholder="5" />
-      <mat-error
+        <mat-error
         class="error-required"
-        *ngIf="callHandleError('calidadSalidaIa', 'required', dynamicForm)"
-        >{{ msgErrorRequired }}</mat-error
+        *ngIf="dynamicForm.get('calidadSalidaIa')?.hasError('min') || dynamicForm.get('calidadSalidaIa')?.hasError('max')"
       >
+        El valor debe estar entre 0 y 10
+      </mat-error>
+      
     </div>
     <div class="col-12 col-lg-4 col-xl-1 col-md-4 col-sm-12 me-2">
       <label for="estimacionSinIa" class="col-12">Estimación sin IA (h)</label>
