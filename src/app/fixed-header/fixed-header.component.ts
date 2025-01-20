@@ -82,7 +82,7 @@ export class FixedHeaderComponent implements OnInit {
   patronAlfaNum = ALPHANUM_REGEX;
   hayComplementos: boolean = false;
   promptCounter:number = 0;
-  idProyecto: number = 10;
+  idProyecto: number = 0;
 
   // Obtener el FormArray de componentes y asegurar que los controles son de tipo FormGroup
   get componentes(): FormArray {
@@ -100,7 +100,7 @@ export class FixedHeaderComponent implements OnInit {
 
   ngOnInit() {
     this.getData(); 
-    this.addComponent();   
+    this.addComponent();  
   }
 
   // Crear el formulario reactivo con validadores básicos
@@ -138,13 +138,13 @@ export class FixedHeaderComponent implements OnInit {
       },
       error: (error: any) => {
         if (DEV_MODE) {
-          console.error(`${DEFAULT_ERROR_MAIN} los proyectos \n Error:`, error);
+          //console.error(`${DEFAULT_ERROR_MAIN} los proyectos \n Error:`, error);
           this.proyectoProcess = COMBO_STATUS.SUCCESS;
           this.projectForm.get('proyecto')?.enable();
           this.proyectos = MOCK_PROYECTOS;
           this.setFilters('proyecto');
         } else {
-          console.error(`${DEFAULT_ERROR_MAIN} los proyectos \n Error:`, error);
+          // console.error(`${DEFAULT_ERROR_MAIN} los proyectos \n Error:`, error);
           this.proyectoProcess = COMBO_STATUS.ERROR;
           this.projectForm.get('proyecto')?.disable();
         }
@@ -167,7 +167,6 @@ export class FixedHeaderComponent implements OnInit {
     if (type === 'historiaJira') {
       this.historiaJiraFiltered = objFiltered;
     }
-    console.log('filt:', objFiltered);
   }
 
   // Método para obtener un FormGroup específico del FormArray
@@ -176,18 +175,18 @@ export class FixedHeaderComponent implements OnInit {
   }
   
   // Método para agregar un nuevo componente (formulario)
-  addComponent() {
+  addComponent() {    
     const componenteForm = this.formBuilder.group({
       prompt: ['', Validators.required],
-      aplicaIa: ['', Validators.required],
       usadaIa: ['', Validators.required],
       calidadSalidaIa: ['',[Validators.min(0),Validators.max(10)]],
       estimacionSinIa: [null, Validators.min(0)],
       estimacionConIa: [null, Validators.min(0)],
     });
     this.componentes.push(componenteForm);
-    this.promptCounter += 1;  
+    this.promptCounter += 1;
     this.havePrompts();
+    this.getData();
   }
 
   //Calcula si hay complementos según el contador
@@ -203,10 +202,7 @@ export class FixedHeaderComponent implements OnInit {
   // Método  para realizar acciones tras seleccionar un valor
   onSelectionProyectoChange(event: any) {
     const projectId = event.option.value.id;
-    this.projectForm.get('prompt')?.enable();
     this.dynamicContentComponent.onProyectoSelected(event);
-    // this.idProyecto = projectId;
-    // console.log(this.idProyecto);
     
     this.sprintProcess = COMBO_STATUS.LOADING;
     this.dataGeneralService.getSprints(projectId).subscribe({
@@ -259,9 +255,6 @@ export class FixedHeaderComponent implements OnInit {
     this.dataGeneralService.getHistoriaJira(event.option.value.id).subscribe({
       next: (data: HistoriaJira[]) => {
         this.historiaJiraProcess = COMBO_STATUS.SUCCESS;
-        // console.log("Antes de ordenar: "+ JSON.stringify(data));
-        // this.historiasJira = data.sort(((a,b) => a.descripcion.localeCompare(b.descripcion)));
-        // console.log("Despues de ordenar: "+JSON.stringify(this.historiasJira));
         this.historiasJira = data;
         this.historiasJira.sort((a,b) => a.descripcion.localeCompare(b.descripcion))
         this.setFilters('historiaJira');
@@ -309,13 +302,10 @@ export class FixedHeaderComponent implements OnInit {
     }else{
       alert('Debe haber minimo 1 complemento');
     }
-    // this.promptCounter -= 1;
-    // this.havePrompts();
   }
 
   // Lógica para guardar o procesar los datos del formulario
   onSubmit() {    
-    console.log('Datos del formulario RAW:', this.projectForm.value);
     if (this.projectForm.value) {
       const formContent = this.projectForm.value;      
       const guardarIA: EstimacionIA = {
@@ -327,10 +317,7 @@ export class FixedHeaderComponent implements OnInit {
         medicionesPorPrompt: this.getComponentes(),
       };
       
-      console.log('Datos del formulario:', guardarIA);
-
       const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-      console.log(guardarIA.medicionesPorPrompt.length);
       if (
           guardarIA.proyectoId != undefined &&
           guardarIA.sprintId != undefined &&
@@ -339,19 +326,15 @@ export class FixedHeaderComponent implements OnInit {
           emailPattern.test(guardarIA.owner) &&
           guardarIA.medicionesPorPrompt.length > 0
         ) {
-        // console.log(guardarIA);
-        // console.log(guardarIA.medicionesPorPrompt[0].promptId);
         
         this.dataGeneralService.guardarDatosIA(guardarIA).subscribe({
           next: (resp: any) => {
             alert('[Main] Se ha guardado correctamente');
-            console.log('[Main] Se ha guardado correctamente', resp);
             this.resetForm();
             this.addComponent();
           },
           error: (error: any) => {
             const errorMsg = ERROR_SAVE_MSG;
-            console.log(errorMsg, error);
             alert(`${errorMsg} \n ${JSON.stringify(error)}`);
           },
         });
@@ -368,10 +351,9 @@ export class FixedHeaderComponent implements OnInit {
     const componentes = this.projectForm.value.componentes;
     let formatComponentes: any[] = [];
     componentes.forEach((comp: any) => {
-      if (comp.prompt?.id !== '' && comp.aplicaIa !== '' && comp.usadaIa !== '') {
+      if (comp.prompt?.id !== '' && comp.usadaIa !== '') {
         const valores = {
           promptId: comp.prompt?.id,
-          aplicaIa: comp.aplicaIa,
           usadaIa: comp.usadaIa,
           calidadSalidaIa: comp.calidadSalidaIa,
           estimacionSinIa: comp.estimacionSinIa,
@@ -389,7 +371,6 @@ export class FixedHeaderComponent implements OnInit {
     return this.formControlsService.hasFormError(input, error, formG);
   }
 
-  // Funciones Autocomplete
 
   // Método  para filtrar el contenido de los combos
   private filterOptions(input: string, type: string): any[] {
@@ -415,7 +396,6 @@ export class FixedHeaderComponent implements OnInit {
 
   // Método  para ajustar el contenido del Input cuando se selecciona
   displayTxt(autoValue: any): string {
-    //console.log(autoValue);
     return autoValue
       ? autoValue.nombre
         ? autoValue.nombre

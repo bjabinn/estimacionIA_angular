@@ -31,23 +31,7 @@
         >{{ msgErrorRequired }}</mat-error
       >
     </div>
-    <div class="col-12 col-lg-4 col-xl-1 col-md-4 col-sm-12 me-2">
-      <label for="aplicaIa" class="col-12">Aplica IA?</label>
-      <select
-        id="aplicaIa"
-        class="col-12"
-        formControlName="aplicaIa"
-        placeholder="Sí/No *">
-        <option value="" disabled selected>Sí/No *</option>
-        <option value="yes">Sí</option>
-        <option value="no">No</option>
-      </select>
-      <mat-error
-        class="error-required"
-        *ngIf="callHandleError('aplicaIa', 'required', dynamicForm)"
-        >{{ msgErrorRequired }}</mat-error
-      >
-    </div>
+  
     <div class="col-12 col-lg-4 col-xl-1 col-md-4 col-sm-12 me-2">
       <label for="usadaIa" class="col-12">Usada IA?</label>
       <select id="usadaIa" class="col-12" formControlName="usadaIa">

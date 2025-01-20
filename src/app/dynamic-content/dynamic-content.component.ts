@@ -38,8 +38,8 @@ import { StorageService } from '@core/services/storage/storage.service';
 export class DynamicContentComponent implements OnInit {
   @Input()
   idProyecto!: number;
-  @Input() dynamicForm: FormGroup = new FormGroup({}); // Asignar un valor inicial
-  @Output() remove = new EventEmitter<void>(); // Emite un evento para eliminar el componente
+  @Input() dynamicForm: FormGroup = new FormGroup({});
+  @Output() remove = new EventEmitter<void>();
 
   promptStatus = COMBO_STATUS.STANDBY;
   prompts: Prompt[] = [];
@@ -47,8 +47,10 @@ export class DynamicContentComponent implements OnInit {
   msgErrorRequired = DEF_REQUIRED_ERROR;
   patronAlfaNum = ALPHANUM_REGEX;
 
+  //Evento que al seleccionar el proyecto habilita el campo de prompts
   onProyectoSelected(event: any){
     this.dynamicForm.get('prompt')?.enable();
+    this.setFilters('prompt');
   }
 
   constructor(
@@ -57,28 +59,22 @@ export class DynamicContentComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getData();
-    console.log(this.idProyecto);
-      
+    this.getData();      
   }
 
+  //Obtencion y filtrado de prompts
   getData() {
-    //this.promptStatus = COMBO_STATUS.LOADING;
     this.dynamicForm.get('prompt')?.disable();
     this.promptStatus = this.dynamicForm.get('prompt')?.disabled ? COMBO_STATUS.STANDBY : COMBO_STATUS.SUCCESS;
-
 
     if (sessionStorage.getItem('promptCombo')) {
       this.prompts = JSON.parse(sessionStorage.getItem('promptCombo') || '');
       this.prompts.sort((a,b) => a.prompt.localeCompare(b.prompt))
-      //this.promptStatus = COMBO_STATUS.SUCCESS;
       this.dynamicForm.get('prompt')?.enable();
       this.setFilters('prompt');
     }
 
-    console.log('complemento', this.prompts);
-
-    if (this.prompts.length < 1) {
+    if (this.prompts.length >= 1) {
       this.dataGeneralService.getPromt().subscribe({
         next: (data: Prompt[]) => {
           sessionStorage.setItem('promptCombo', JSON.stringify(data));
@@ -89,14 +85,14 @@ export class DynamicContentComponent implements OnInit {
         error: (error: any) => {
           if (DEV_MODE) {
             this.promptStatus = COMBO_STATUS.SUCCESS;
-            console.error(`${DEFAULT_ERROR_MAIN} los prompts \n Error:`, error);
+            // console.error(`${DEFAULT_ERROR_MAIN} los prompts \n Error:`, error);
             this.prompts = MOCK_PROMT;
             this.dynamicForm.get('prompt')?.enable();
             this.setFilters('prompt');
             sessionStorage.setItem('promptCombo', JSON.stringify(MOCK_PROMT));
           } else {
             this.promptStatus = COMBO_STATUS.ERROR;
-            console.error(`${DEFAULT_ERROR_MAIN} los prompts \n Error:`, error);
+            // console.error(`${DEFAULT_ERROR_MAIN} los prompts \n Error:`, error);
             this.prompts = [];
             this.dynamicForm.get('prompt')?.disable();
             sessionStorage.setItem('promptCombo', '');
@@ -112,7 +108,14 @@ export class DynamicContentComponent implements OnInit {
       : `Selecciona ${normal}`;
   }
 
-  onSelectionPromptChange(event: any) {}
+  onSelectionPromptChange(event: any) {
+    const form = this.dynamicForm.get('prompt');
+    if (form) {
+      form.setValue(event.option.value);
+      console.log(event.option.value);
+      form.enable();
+    }
+  }
 
   callHandleError(input: string, error: string, formG: FormGroup) {
     return this.formControlsService.hasFormError(input, error, formG);
@@ -124,6 +127,7 @@ export class DynamicContentComponent implements OnInit {
       map((value: any) => this.filterOptions(value, type))
     );
   }
+
   // Funciones Autocomplete
   private filterOptions(input: string, type: string): any[] {
     const filteredValue = input && this.patronAlfaNum.test(input)
@@ -135,7 +139,6 @@ export class DynamicContentComponent implements OnInit {
   }
 
   displayTxt(autoValue: Prompt): string {
-    console.log(autoValue);
     return autoValue ? autoValue.prompt : '';
   }
 
