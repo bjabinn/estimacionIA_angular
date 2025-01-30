@@ -1,1 +1,3 @@
-<app-fixed-header></app-fixed-header>
+<app-menu></app-menu>
+<app-fixed-header *ngIf="currentComponent === 'FixedHeaderComponent'"></app-fixed-header>
+<app-view-estimacion *ngIf="currentComponent === 'ViewEstimacionComponent'"></app-view-estimacion>

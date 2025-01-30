@@ -187,6 +187,8 @@ export class FixedHeaderComponent implements OnInit {
     this.promptCounter += 1;
     this.havePrompts();
     this.getData();
+    // this.setFilters(this.componentes.at(this.promptCounter-1))
+    console.log(this.componentes.at(this.promptCounter-1));
   }
 
   //Calcula si hay complementos según el contador

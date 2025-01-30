@@ -50,7 +50,6 @@ export class DynamicContentComponent implements OnInit {
   //Evento que al seleccionar el proyecto habilita el campo de prompts
   onProyectoSelected(event: any){
     this.dynamicForm.get('prompt')?.enable();
-    this.setFilters('prompt');
   }
 
   constructor(
@@ -114,6 +113,7 @@ export class DynamicContentComponent implements OnInit {
       form.setValue(event.option.value);
       console.log(event.option.value);
       form.enable();
+      this.setFilters(event.option.value);
     }
   }
 
