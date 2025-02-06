@@ -1,4 +1,5 @@
 body{
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -63,5 +64,91 @@ form>label{
     &:hover{
         background-color: rgb(58, 58, 58);
         transition: 0.25s;
+    }
+}
+
+main{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.filtrosContainer{
+    width: 96%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 15px;
+    padding: 2%;
+
+    select{
+        width: 15%;
+        border-radius: 5px;
+    }
+
+    svg{
+        width: 3%;
+        height: auto;
+    }
+}
+
+.listaContainer{
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 4%;
+    border: 2px solid red;
+    padding: 0.75%;
+    border: 2px solid black;
+    border-radius: 10px;
+}
+
+ul{
+    width: 95%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    filter: drop-shadow(2px 2px 2.5px black);
+}
+
+li{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 1.5%;
+    margin: 0;
+    line-height: 100%;
+    background-color: #E5E5E5;
+    border-top: 1px solid #000;
+
+    &:first-child{
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        border-top: none;
+    }
+
+    &:last-child{
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+    }
+}
+
+.squad, .sprint, .historiaJira, .prompt{
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    line-height: 100%;
+    gap: 5px;
+
+    p{
+        margin: 0;
     }
 }

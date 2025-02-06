@@ -42,4 +42,8 @@ export class DataGeneralService {
       headers,
     });
   }
+
+  getEstimacionById(id: number): Observable<EstimacionIA[]>{
+    return this.http.get<EstimacionIA[]>(`${this.backUrl}/estimacion/${id}`)
+  }
 }
